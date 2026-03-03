@@ -115,7 +115,7 @@ Task("Run tests", "Run pytest tests/")
 Install from the Claude Code plugin marketplace:
 
 ```
-/plugin marketplace add withzombies/hyperpowers
+/plugin marketplace add sQVe/hyperpowers
 /plugin install hyperpowers@withzombies-hyper
 ```
 
