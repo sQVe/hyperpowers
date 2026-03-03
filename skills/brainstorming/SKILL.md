@@ -1,10 +1,10 @@
 ---
 name: brainstorming
-description: Use when creating or developing anything, before writing code - refines rough ideas into bd epics with immutable requirements
+description: Use when creating or developing anything, before writing code - refines rough ideas into br epics with immutable requirements
 ---
 
 <skill_overview>
-Turn rough ideas into validated designs stored as bd epics with immutable requirements; tasks created iteratively as you learn, not upfront.
+Turn rough ideas into validated designs stored as br epics with immutable requirements; tasks created iteratively as you learn, not upfront.
 </skill_overview>
 
 <rigidity_level>
@@ -18,7 +18,7 @@ HIGH FREEDOM - Adapt Socratic questioning to context, but always create immutabl
 | 2 | Research (agents for codebase/internet) | Existing patterns and approaches |
 | 3 | Propose 2-3 approaches with trade-offs | Recommended option |
 | 4 | Present design in sections (200-300 words) | Validated architecture |
-| 5 | Create bd epic with IMMUTABLE requirements | Epic with anti-patterns |
+| 5 | Create br epic with IMMUTABLE requirements | Epic with anti-patterns |
 | 6 | Create ONLY first task | Ready for executing-plans |
 | 7 | Hand off to executing-plans | Iterative implementation begins |
 
@@ -178,12 +178,12 @@ These concerns often resurface during implementation - having the resolution doc
 
 ---
 
-## 4. Creating the bd Epic
+## 4. Creating the br Epic
 
 **After design validated, create epic as immutable contract:**
 
 ```bash
-bd create "Feature: [Feature Name]" \
+br create "Feature: [Feature Name]" \
   --type epic \
   --priority [0-4] \
   --design "## Requirements (IMMUTABLE)
@@ -345,7 +345,7 @@ bd create "Feature: [Feature Name]" \
 **Create one task, not full tree:**
 
 ```bash
-bd create "Task 1: [Specific Deliverable]" \
+br create "Task 1: [Specific Deliverable]" \
   --type feature \
   --priority [match-epic] \
   --design "## Goal
@@ -369,7 +369,7 @@ bd create "Task 1: [Specific Deliverable]" \
 - [ ] Tests passing
 - [ ] Pre-commit hooks passing"
 
-bd dep add bd-2 bd-1 --type parent-child  # Link to epic
+br dep add br-2 br-1 --type parent-child  # Link to epic
 ```
 
 **Why only one task?**
@@ -400,8 +400,8 @@ SRE refinement will:
 **After refinement approved, present handoff:**
 
 ```
-"Epic bd-1 is ready with immutable requirements and success criteria.
-First task bd-2 has been refined and is ready to execute.
+"Epic br-1 is ready with immutable requirements and success criteria.
+First task br-2 has been refined and is ready to execute.
 
 Ready to start implementation? I'll use executing-plans to work through this iteratively.
 
@@ -475,13 +475,13 @@ Claude (without brainstorming):
 <scenario>Developer creates full task tree upfront</scenario>
 
 <code>
-bd create "Epic: Add OAuth"
-bd create "Task 1: Configure OAuth provider"
-bd create "Task 2: Implement token exchange"
-bd create "Task 3: Add refresh token logic"
-bd create "Task 4: Create middleware"
-bd create "Task 5: Add UI components"
-bd create "Task 6: Write integration tests"
+br create "Epic: Add OAuth"
+br create "Task 1: Configure OAuth provider"
+br create "Task 2: Implement token exchange"
+br create "Task 3: Add refresh token logic"
+br create "Task 4: Create middleware"
+br create "Task 5: Add UI components"
+br create "Task 6: Write integration tests"
 
 # Starts implementing Task 1
 # Discovers OAuth library handles refresh automatically
@@ -503,19 +503,19 @@ bd create "Task 6: Write integration tests"
 **Correct approach (iterative):**
 
 ```bash
-bd create "Epic: Add OAuth" [with immutable requirements]
-bd create "Task 1: Configure OAuth provider"
+br create "Epic: Add OAuth" [with immutable requirements]
+br create "Task 1: Configure OAuth provider"
 
 # Execute Task 1
 # Learn: OAuth library handles refresh, middleware exists
 
-bd create "Task 2: Integrate with existing middleware"
+br create "Task 2: Integrate with existing middleware"
 # [Created AFTER learning from Task 1]
 
 # Execute Task 2
 # Learn: UI needs OAuth button component
 
-bd create "Task 3: Add OAuth button to login UI"
+br create "Task 3: Add OAuth button to login UI"
 # [Created AFTER learning from Task 2]
 ```
 
@@ -532,7 +532,7 @@ bd create "Task 3: Add OAuth button to login UI"
 <scenario>Epic created without anti-patterns section</scenario>
 
 <code>
-bd create "Epic: OAuth Authentication" --design "
+br create "Epic: OAuth Authentication" --design "
 ## Requirements
 - Users authenticate via Google OAuth2
 - Tokens stored securely
@@ -562,7 +562,7 @@ bd create "Epic: OAuth Authentication" --design "
 **Correct approach with anti-patterns and design rationale:**
 
 ```bash
-bd create "Epic: OAuth Authentication" --design "
+br create "Epic: OAuth Authentication" --design "
 ## Requirements (IMMUTABLE)
 - Users authenticate via Google OAuth2
 - Tokens stored in httpOnly cookies (NOT localStorage)
@@ -841,7 +841,7 @@ Before handing off to executing-plans:
 - [ ] Researched external docs/libraries (if applicable)
 - [ ] Proposed 2-3 approaches with trade-offs
 - [ ] Presented design in sections, validated each
-- [ ] Created bd epic with all sections (requirements, success criteria, anti-patterns, approach, architecture, design rationale)
+- [ ] Created br epic with all sections (requirements, success criteria, anti-patterns, approach, architecture, design rationale)
 - [ ] Requirements are IMMUTABLE and specific
 - [ ] Anti-patterns include reasoning (not just "NO X" but "NO X (reason: Y)")
 - [ ] Design Rationale complete: problem, research findings, approaches considered, scope boundaries, open questions
@@ -880,7 +880,7 @@ brainstorming → sre-task-refinement → executing-plans
 
 <resources>
 **Detailed guides:**
-- [bd epic template examples](resources/epic-templates.md)
+- [br epic template examples](resources/epic-templates.md)
 - [Socratic questioning patterns](resources/questioning-patterns.md)
 - [Anti-pattern examples by domain](resources/anti-patterns.md)
 

@@ -1,10 +1,10 @@
 ---
 name: review-implementation
-description: Use after hyperpowers:executing-plans completes all tasks - verifies implementation against bd spec, all success criteria met, anti-patterns avoided
+description: Use after hyperpowers:executing-plans completes all tasks - verifies implementation against br spec, all success criteria met, anti-patterns avoided
 ---
 
 <skill_overview>
-Review completed implementation against bd epic to catch gaps before claiming completion; spec is contract, implementation must fulfill contract completely.
+Review completed implementation against br epic to catch gaps before claiming completion; spec is contract, implementation must fulfill contract completely.
 </skill_overview>
 
 <rigidity_level>
@@ -46,7 +46,7 @@ Rate each finding 0.0-1.0:
 <quick_reference>
 | Step | Action | Deliverable |
 |------|--------|-------------|
-| 1 | Load bd epic + all tasks | TodoWrite with tasks to review |
+| 1 | Load br epic + all tasks | TodoWrite with tasks to review |
 | 2 | Review each task (automated checks, quality gates, read code, **audit tests**, verify criteria) | Findings per task |
 | 3 | Report findings (approved / gaps found) | Review decision |
 | 4 | Gate: If approved → finishing-a-development-branch, If gaps → STOP | Next action |
@@ -76,18 +76,18 @@ Rate each finding 0.0-1.0:
 **Get epic and tasks:**
 
 ```bash
-bd show bd-1          # Epic specification
-bd dep tree bd-1      # Task tree
-bd list --parent bd-1 # All tasks
+br show br-1          # Epic specification
+br dep tree br-1      # Task tree
+br list --parent br-1 # All tasks
 ```
 
 **Create TodoWrite tracker:**
 
 ```
 TodoWrite todos:
-- Review bd-2: Task Name
-- Review bd-3: Task Name
-- Review bd-4: Task Name
+- Review br-2: Task Name
+- Review br-3: Task Name
+- Review br-4: Task Name
 - Compile findings and make decision
 ```
 
@@ -100,7 +100,7 @@ For each task:
 ### A. Read Task Specification
 
 ```bash
-bd show bd-3
+br show br-3
 ```
 
 Extract:
@@ -180,7 +180,7 @@ rg -i "backward.*compat|legacy.*support|shim|polyfill" src/ || echo "✅ None"
 1. **Fallback code:** Why does old implementation still exist? Delete it.
 2. **Unused functions:** Who calls this? If nobody, delete it.
 3. **Orphaned tests:** Does tested functionality still exist? If not, delete test.
-4. **Deprecation markers:** Remove now or create bd issue with removal date.
+4. **Deprecation markers:** Remove now or create br issue with removal date.
 5. **Backwards compat shims:** Is this external API? If internal, delete shim.
 
 **Dead Code Audit Results Template:**
@@ -394,7 +394,7 @@ Read tool: tests/new_feature_test.swift
 
 ### F. Verify Success Criteria with Evidence
 
-For EACH criterion in bd task:
+For EACH criterion in br task:
 - Run verification command
 - Check actual output
 - Don't assume - verify with evidence
@@ -418,7 +418,7 @@ Result: ✅ Met
 
 ### G. Check Anti-Patterns
 
-Search for each prohibited pattern from bd task:
+Search for each prohibited pattern from br task:
 
 ```bash
 # Example anti-patterns from task
@@ -445,7 +445,7 @@ Read code to confirm edge cases handled:
 ### I. Record Findings
 
 ```markdown
-### Task: bd-3 - Implement JWT authentication
+### Task: br-3 - Implement JWT authentication
 
 #### Evidence-Based Findings
 
@@ -524,12 +524,12 @@ After reviewing ALL tasks:
 ```markdown
 ## Implementation Review: APPROVED ✅
 
-Reviewed bd-1 (OAuth Authentication) against implementation.
+Reviewed br-1 (OAuth Authentication) against implementation.
 
 ### Tasks Reviewed
-- bd-2: Configure OAuth provider ✅
-- bd-3: Implement token exchange ✅
-- bd-4: Add refresh logic ✅
+- br-2: Configure OAuth provider ✅
+- br-3: Implement token exchange ✅
+- br-4: Add refresh logic ✅
 
 ### Verification Summary
 - All success criteria verified
@@ -551,11 +551,11 @@ Ready to proceed to hyperpowers:finishing-a-development-branch.
 ```markdown
 ## Implementation Review: GAPS FOUND ❌
 
-Reviewed bd-1 (OAuth Authentication) against implementation.
+Reviewed br-1 (OAuth Authentication) against implementation.
 
 ### Tasks with Gaps
 
-#### bd-3: Implement token exchange
+#### br-3: Implement token exchange
 **Gaps:**
 - ❌ Success criterion not met: "Pre-commit hooks pass"
   - Evidence: cargo clippy shows 3 warnings
@@ -563,7 +563,7 @@ Reviewed bd-1 (OAuth Authentication) against implementation.
 - ⚠️ Key consideration not addressed: "Empty payload validation"
   - No check for empty payload in generateToken()
 
-#### bd-4: Add refresh logic
+#### br-4: Add refresh logic
 **Gaps:**
 - ❌ Success criterion not met: "All tests passing"
   - Evidence: test_verify_expired_token failing
@@ -638,7 +638,7 @@ Read tool: src/auth/jwt.ts
 **Reading full file reveals:**
 ```javascript
 function generateToken(payload) {
-  // Missing: empty payload check (key consideration from bd task)
+  // Missing: empty payload check (key consideration from br task)
   // Missing: error handling for jwt.sign failure
   return jwt.sign(payload, secret);
 }
@@ -675,7 +675,7 @@ cargo test
 # Proceeds to finishing-a-development-branch
 
 # Misses:
-- bd task has 5 success criteria
+- br task has 5 success criteria
 - Only checked 1 (tests pass)
 - Anti-pattern: unwrap() present (prohibited)
 - Key consideration: Unicode handling not tested
@@ -695,7 +695,7 @@ cargo test
 **Correct review checks ALL criteria:**
 
 ```markdown
-bd task has 5 success criteria:
+br task has 5 success criteria:
 1. "All tests pass" ✅ - Evidence: 127 passed
 2. "Pre-commit passes" ❌ - Evidence: clippy warns (3 warnings)
 3. "No unwrap in production" ❌ - Evidence: Found at jwt.ts:45
@@ -735,7 +735,7 @@ rg "unicode" tests/
 <scenario>Developer rationalizes skipping rigor for "simple" task</scenario>
 
 <code>
-bd task: "Add logging to error paths"
+br task: "Add logging to error paths"
 
 # Developer thinks: "Simple task, just added console.log"
 # Skips:
@@ -770,8 +770,8 @@ bd task: "Add logging to error paths"
 rg "console\.log" src/
 # Found at error-handler.ts:12, 15 ⚠️
 
-# Read bd task
-bd show bd-5
+# Read br task
+br show br-5
 
 # Success criteria:
 # 1. "All error paths logged"
@@ -1016,7 +1016,7 @@ All of these mean: **STOP. Follow full review process.**
 Before approving implementation:
 
 **Per task:**
-- [ ] Read bd task specification completely
+- [ ] Read br task specification completely
 - [ ] Ran all automated checks (TODOs, stubs, unwrap, ignored tests)
 - [ ] **Ran dead code audit (fallback patterns, unused code, deprecation, orphaned tests)**
 - [ ] Ran all quality gates via test-runner agent (tests, format, lint, pre-commit)
@@ -1055,7 +1055,7 @@ hyperpowers:executing-plans → hyperpowers:review-implementation → hyperpower
                    (if gaps: STOP)
 ```
 
-**CRITICAL:** Use bd commands (bd show, bd list, bd dep tree), never read `.beads/issues.jsonl` directly.
+**CRITICAL:** Use br commands (`br show`, `br list`, `br dep tree`), never read `.beads/issues.jsonl` directly.
 </integration>
 
 <resources>

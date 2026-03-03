@@ -95,7 +95,7 @@ Don't use when: [Anti-patterns]
 12. ✅ **testing-anti-patterns** (474→581 lines) - 3 Iron Laws for testing
 13. ✅ **finishing-a-development-branch** (264→482 lines) - 4 integration options
 14. ✅ **review-implementation** (467→646 lines) - Google Fellow-level review
-15. ✅ **managing-bd-tasks** (515→707 lines) - 8 advanced operations
+15. ✅ **managing-br-tasks** (515→707 lines) - 8 advanced operations
 16. ✅ **building-hooks** (397→609 lines) - Progressive enhancement pattern
 17. ✅ **skills-auto-activation** (490→400 lines) - 3 solution levels
 18. ✅ **dispatching-parallel-agents** (367→663 lines) - 6-step parallel workflow
@@ -171,7 +171,7 @@ Shows how each skill fits in workflows:
 ### Most Comprehensive Skills
 1. sre-task-refinement: 820 lines (7-category checklist)
 2. executing-plans: 721 lines (5-step iterative execution)
-3. managing-bd-tasks: 707 lines (8 advanced operations)
+3. managing-br-tasks: 707 lines (8 advanced operations)
 4. debugging-with-tools: 670 lines (5-step systematic investigation)
 5. review-implementation: 646 lines (Google Fellow-level review)
 
@@ -230,7 +230,7 @@ Skills that enable other skills:
 
 ### 4. Advanced Operations Skills (4 skills)
 Skills for complex scenarios:
-- managing-bd-tasks (8 operations: split, merge, dependencies, metrics)
+- managing-br-tasks (8 operations: split, merge, dependencies, metrics)
 - root-cause-tracing (trace backward through call stack)
 - sre-task-refinement (7-category review checklist)
 - writing-skills (TDD for documentation)
@@ -256,7 +256,7 @@ Skills for complex scenarios:
 - refactoring-safely (Change→Test→Commit, adapt step size)
 - building-hooks (Progressive enhancement, adapt patterns)
 - dispatching-parallel-agents (6 steps, adapt prompts)
-- managing-bd-tasks (8 operations, adapt to need)
+- managing-br-tasks (8 operations, adapt to need)
 - root-cause-tracing (Trace backward, adapt to stack depth)
 - testing-anti-patterns (3 Iron Laws, adapt to language)
 - brainstorming (Socratic method, adapt questions)
@@ -361,7 +361,7 @@ hyperpowers:finishing-a-development-branch
 ### Skills Called
 - Direct invocations via Skill tool
 - Agent dispatches
-- Tool usage (bd, git, test-runner)
+- Tool usage (br, git, test-runner)
 
 ### Skills That Call This
 - Upstream workflow steps
@@ -401,7 +401,7 @@ Every skill has concrete, actionable checklists:
 
 Reference documents (no XML needed - already well-structured):
 
-1. **bd-commands.md** (142 lines)
+1. **br-commands.md** (142 lines)
    - Reading, creating, updating, status, dependencies
    - Common mistakes and corrections
    - Valid status values
@@ -511,14 +511,14 @@ LOW FREEDOM - Follow RED-GREEN-REFACTOR cycle exactly. Iron Law: NO CODE WITHOUT
 12. skills/testing-anti-patterns/SKILL.md
 13. skills/finishing-a-development-branch/SKILL.md
 14. skills/review-implementation/SKILL.md
-15. skills/managing-bd-tasks/SKILL.md
+15. skills/managing-br-tasks/SKILL.md
 16. skills/building-hooks/SKILL.md
 17. skills/skills-auto-activation/SKILL.md
 18. skills/dispatching-parallel-agents/SKILL.md
 19. skills/sre-task-refinement/SKILL.md
 
 ### Common Patterns (3 files - no changes needed)
-- skills/common-patterns/bd-commands.md (already well-structured)
+- skills/common-patterns/br-commands.md (already well-structured)
 - skills/common-patterns/common-anti-patterns.md (already well-structured)
 - skills/common-patterns/common-rationalizations.md (already well-structured)
 

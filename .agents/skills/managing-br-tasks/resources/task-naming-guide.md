@@ -1,4 +1,4 @@
-# bd Task Naming and Quality Guidelines
+# br Task Naming and Quality Guidelines
 
 This guide covers best practices for naming tasks, setting priorities, sizing work, and defining success criteria.
 
@@ -116,7 +116,7 @@ Build export functionality for report data
 
 ## Priority Guidelines
 
-Use bd's priority system consistently:
+Use br's priority system consistently:
 
 - **P0:** Critical production bug (drop everything)
 - **P1:** Blocking other work (do next)
@@ -203,7 +203,7 @@ Then they see error: "Only CSV files supported"
 - [ ] Manual testing completed (if UI)
 - [ ] Deployed to staging environment
 - [ ] Product owner accepted
-- [ ] Commit references bd task ID
+- [ ] Commit references br task ID
 ```
 
 ### Key Differences
@@ -225,7 +225,7 @@ Then they see error: "Only CSV files supported"
 2. **Reference Definition of Done** (don't duplicate it in task)
 
 ```markdown
-bd create "Implement CSV file upload" --design "
+br create "Implement CSV file upload" --design "
 ## Acceptance Criteria
 - [ ] User can upload CSV files up to 10MB
 - [ ] System validates CSV format

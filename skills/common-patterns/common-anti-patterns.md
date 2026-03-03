@@ -13,7 +13,7 @@ Anti-patterns that apply across multiple skills. Reference this to avoid duplica
 ❌ No todo!(), unimplemented!(), or panic!() in production
    Implement all code paths properly
 
-❌ No #[ignore] on tests without bd issue number
+❌ No #[ignore] on tests without br issue number
    Fix or track broken tests
 
 ❌ No unsafe blocks without documentation
@@ -32,7 +32,7 @@ Anti-patterns that apply across multiple skills. Reference this to avoid duplica
 ❌ No fatalError() in production code
    Handle errors gracefully
 
-❌ No disabled tests without bd issue number
+❌ No disabled tests without br issue number
    Fix or track broken tests
 
 ❌ Use proper array bounds checking
@@ -45,13 +45,13 @@ Anti-patterns that apply across multiple skills. Reference this to avoid duplica
 ### TypeScript
 
 ```
-❌ No @ts-ignore or @ts-expect-error without bd issue number
+❌ No @ts-ignore or @ts-expect-error without br issue number
    Fix type issues properly
 
 ❌ No any types without justification
    Use proper typing
 
-❌ No .skip() on tests without bd issue number
+❌ No .skip() on tests without br issue number
    Fix or track broken tests
 
 ❌ No throw in async code without proper handling
@@ -63,8 +63,8 @@ Anti-patterns that apply across multiple skills. Reference this to avoid duplica
 ### Code Quality
 
 ```
-❌ No TODOs or FIXMEs without bd issue numbers
-   Track work in bd, not in code comments
+❌ No TODOs or FIXMEs without br issue numbers
+   Track work in br, not in code comments
 
 ❌ No stub implementations
    Empty functions, placeholder returns forbidden
@@ -76,7 +76,7 @@ Anti-patterns that apply across multiple skills. Reference this to avoid duplica
    Remove console.log, println!, print() before committing
 
 ❌ No "we'll do this later"
-   Either do it now or create bd issue and reference it
+   Either do it now or create br issue and reference it
 ```
 
 ### Testing
@@ -143,9 +143,9 @@ After refactoring, old code is dead code. Delete it.
    - Delete or update these tests
 
 ❌ No deprecation markers without timeline
-   Either remove now or create bd issue with removal date
+   Either remove now or create br issue with removal date
    - @deprecated without action = "keep forever"
-   - Every @deprecated needs: bd issue + removal date
+   - Every @deprecated needs: br issue + removal date
    - If no external consumers, just delete it now
 
 ❌ No "V2" without removing V1

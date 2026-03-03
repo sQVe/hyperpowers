@@ -24,12 +24,12 @@ MEDIUM FREEDOM - Follow the change→test→commit cycle strictly, but adapt the
 | Step | Action | Verify |
 |------|--------|--------|
 | 1 | Run full test suite | ALL pass |
-| 2 | Create bd refactoring task | Track work |
+| 2 | Create br refactoring task | Track work |
 | 3 | Make ONE small change | Compiles |
 | 4 | Run tests immediately | ALL still pass |
 | 5 | Commit with descriptive message | History clear |
 | 6 | Repeat 3-5 until complete | Each step safe |
-| 7 | Final verification & close bd | Done |
+| 7 | Final verification & close br | Done |
 
 **Core cycle:** Change → Test → Commit (repeat until complete)
 </quick_reference>
@@ -64,16 +64,16 @@ Dispatch hyperpowers:test-runner agent: "Run: cargo test"
 
 ---
 
-## 2. Create bd Task for Refactoring
+## 2. Create br Task for Refactoring
 
 Track the refactoring work:
 
 ```bash
-bd create "Refactor: Extract user validation logic" \
+br create "Refactor: Extract user validation logic" \
   --type task \
   --priority P2
 
-bd edit bd-456 --design "
+br edit br-456 --design "
 ## Goal
 Extract user validation logic from UserService into separate Validator class.
 
@@ -96,7 +96,7 @@ Extract user validation logic from UserService into separate Validator class.
 - Validator has 100% test coverage
 "
 
-bd update bd-456 --status in_progress
+br update br-456 --status in_progress
 ```
 
 ---
@@ -180,11 +180,11 @@ Dispatch hyperpowers:test-runner agent: "Run: cargo test"
 Commit each safe transformation:
 
 ```bash
-Dispatch hyperpowers:test-runner agent: "Run: git add src/user_service.rs && git commit -m 'refactor(bd-456): extract email validation to function
+Dispatch hyperpowers:test-runner agent: "Run: git add src/user_service.rs && git commit -m 'refactor(br-456): extract email validation to function
 
 No behavior change. All tests pass.
 
-Part of bd-456'"
+Part of br-456'"
 ```
 
 **Why commit so often:**
@@ -230,7 +230,7 @@ Dispatch hyperpowers:test-runner agent: "Run: cargo clippy"
 
 ```bash
 # See all refactoring commits
-git log --oneline | grep "bd-456"
+git log --oneline | grep "br-456"
 
 # Review full diff
 git diff main...HEAD
@@ -243,10 +243,10 @@ git diff main...HEAD
 - [ ] Code is cleaner/simpler
 - [ ] Each commit is small and safe
 
-**Close bd task:**
+**Close br task:**
 
 ```bash
-bd edit bd-456 --design "
+br edit br-456 --design "
 ... (append to existing design)
 
 ## Completed
@@ -257,7 +257,7 @@ bd edit bd-456 --design "
 - 8 small transformations, each tested
 "
 
-bd close bd-456
+br close br-456
 ```
 </the_process>
 
@@ -516,10 +516,10 @@ Before marking refactoring complete:
 - [ ] No behavior changes introduced
 - [ ] Code is cleaner/simpler than before
 - [ ] Each commit in history is small and safe
-- [ ] bd task documents what was done and why
+- [ ] br task documents what was done and why
 - [ ] Can explain what each transformation did
 
-**Can't check all boxes?** Return to process and fix before closing bd task.
+**Can't check all boxes?** Return to process and fix before closing br task.
 </verification_checklist>
 
 <integration>

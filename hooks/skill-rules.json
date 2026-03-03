@@ -102,9 +102,9 @@
     "enforcement": "suggest",
     "priority": "high",
     "promptTriggers": {
-      "keywords": ["expand", "enhance", "detailed steps", "implementation steps", "bd tasks"],
+      "keywords": ["expand", "enhance", "detailed steps", "implementation steps", "br tasks"],
       "intentPatterns": [
-        "expand.*?(bd|task|plan)",
+        "expand.*?(br|task|plan)",
         "enhance.*?with.*(steps|details)",
         "add.*(implementation|detailed).*(steps|instructions)",
         "write.*?plan"
@@ -116,12 +116,12 @@
     "enforcement": "suggest",
     "priority": "high",
     "promptTriggers": {
-      "keywords": ["execute", "implement", "start working", "begin implementation", "work on bd"],
+      "keywords": ["execute", "implement", "start working", "begin implementation", "work on br"],
       "intentPatterns": [
-        "execute.*(plan|tasks|bd)",
+        "execute.*(plan|tasks|br)",
         "(start|begin).*(implementation|work|executing)",
-        "implement.*?bd-\\d+",
-        "work.*?on.*(tasks|bd|plan)"
+        "implement.*?br-\\d+",
+        "work.*?on.*(tasks|br|plan)"
       ]
     }
   },
@@ -162,34 +162,34 @@
         "sre task refinement",
         "sre-task-refinement",
         "refine task",
-        "refine bd task",
+        "refine br task",
         "corner cases",
         "requirements",
         "edge cases"
       ],
       "intentPatterns": [
         "hyperpowers:sre-task-refinement\\s*\\(",
-        "sre\\s+refinement\\s+on\\s+task\\s+bd-\\d+",
-        "sre\\s+refinement\\s+on\\s+bd-\\d+",
+        "sre\\s+refinement\\s+on\\s+task\\s+br-\\d+",
+        "sre\\s+refinement\\s+on\\s+br-\\d+",
         "refine.*?(task|subtask|requirements)",
-        "refine.*?bd-\\d+",
-        "(review|scrutinize).*?bd-\\d+.*?(sre|edge|corner)",
+        "refine.*?br-\\d+",
+        "(review|scrutinize).*?br-\\d+.*?(sre|edge|corner)",
         "(corner|edge).*(cases|scenarios)",
         "requirements.*?(clear|complete|understood)"
       ]
     }
   },
-  "managing-bd-tasks": {
+  "managing-br-tasks": {
     "type": "workflow",
     "enforcement": "suggest",
     "priority": "low",
     "promptTriggers": {
-      "keywords": ["split task", "merge tasks", "bd dependencies", "archive epic"],
+      "keywords": ["split task", "merge tasks", "br dependencies", "archive epic"],
       "intentPatterns": [
         "(split|divide).*?task",
         "merge.*?tasks",
         "(change|add|remove).*?dependencies",
-        "(archive|query|metrics).*?bd"
+        "(archive|query|metrics).*?br"
       ]
     }
   },
@@ -298,10 +298,10 @@
         "commit.*?(message|with)",
         "ready.*?commit",
         "pre-commit.*?(hooks|run)",
-        "(finish|complete|wrap up|done with).*?bd-\\d+",
+        "(finish|complete|wrap up|done with).*?br-\\d+",
         "(save|persist).*?(work|changes)",
-        "(mark|update|close).*?(bd-\\d+|task).*?(done|complete|finished)",
-        "update.*?bd.*?status",
+        "(mark|update|close).*?(br-\\d+|task).*?(done|complete|finished)",
+        "update.*?br.*?status",
         "(run|execute).*?(test|spec).*?(suite|script|sh|all)?",
         "(npm|yarn|pnpm|bun).*(test|run test)",
         "pytest|python.*test",

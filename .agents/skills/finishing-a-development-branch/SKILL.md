@@ -1,6 +1,6 @@
 ---
 name: finishing-a-development-branch
-description: Use when implementation complete and tests pass - closes bd epic, presents integration options (merge/PR/keep/discard), executes choice
+description: Use when implementation complete and tests pass - closes br epic, presents integration options (merge/PR/keep/discard), executes choice
 ---
 
 <codex_compat>
@@ -13,7 +13,7 @@ This skill was ported from Claude Code. In Codex:
 
 
 <skill_overview>
-Close bd epic, verify tests pass, present 4 integration options, execute choice, cleanup worktree appropriately.
+Close br epic, verify tests pass, present 4 integration options, execute choice, cleanup worktree appropriately.
 </skill_overview>
 
 <rigidity_level>
@@ -23,7 +23,7 @@ LOW FREEDOM - Follow the 6-step process exactly. Present exactly 4 options. Neve
 <quick_reference>
 | Step | Action | If Blocked |
 |------|--------|------------|
-| 1 | Close bd epic | Tasks still open → STOP |
+| 1 | Close br epic | Tasks still open → STOP |
 | 2 | Verify tests pass (test-runner agent) | Tests fail → STOP |
 | 3 | Determine base branch | Ask if needed |
 | 4 | Present exactly 4 options | Wait for choice |
@@ -35,7 +35,7 @@ LOW FREEDOM - Follow the 6-step process exactly. Present exactly 4 options. Neve
 
 <when_to_use>
 - Implementation complete and reviewed
-- All bd tasks for epic are done
+- All br tasks for epic are done
 - Ready to integrate work back to main branch
 - Called by hyperpowers:review-implementation (final step)
 
@@ -47,22 +47,22 @@ LOW FREEDOM - Follow the 6-step process exactly. Present exactly 4 options. Neve
 </when_to_use>
 
 <the_process>
-## Step 1: Close bd Epic
+## Step 1: Close br Epic
 
 **Announce:** "I'm using hyperpowers:finishing-a-development-branch to complete this work."
 
 **Verify all tasks closed:**
 
 ```bash
-bd dep tree bd-1  # Show task tree
-bd list --status open --parent bd-1  # Check for open tasks
+br dep tree br-1  # Show task tree
+br list --status open --parent br-1  # Check for open tasks
 ```
 
 **If any tasks still open:**
 ```
-Cannot close epic bd-1: N tasks still open:
-- bd-3: Task Name (status: in_progress)
-- bd-5: Task Name (status: open)
+Cannot close epic br-1: N tasks still open:
+- br-3: Task Name (status: in_progress)
+- br-5: Task Name (status: open)
 
 Complete all tasks before finishing.
 ```
@@ -72,7 +72,7 @@ Complete all tasks before finishing.
 **If all tasks closed:**
 
 ```bash
-bd close bd-1
+br close br-1
 ```
 
 ---
@@ -158,8 +158,8 @@ Then: Step 6 (cleanup worktree)
 **Get epic info:**
 
 ```bash
-bd show bd-1
-bd dep tree bd-1
+br show br-1
+br dep tree br-1
 ```
 
 **Create PR:**
@@ -170,14 +170,14 @@ git push -u origin <feature-branch>
 gh pr create --title "feat: <epic-name>" --body "$(cat <<'EOF'
 ## Epic
 
-Closes bd-<N>: <Epic Title>
+Closes br-<N>: <Epic Title>
 
 ## Summary
 <2-3 bullets from epic implementation>
 
 ## Tasks Completed
-- bd-2: <Task Name>
-- bd-3: <Task Name>
+- br-2: <Task Name>
+- br-3: <Task Name>
 
 ## Test Plan
 - [ ] All tests passing
@@ -245,7 +245,7 @@ git worktree remove <worktree-path>
 
 <code>
 # Step 1: Epic closed ✓
-bd close bd-1
+br close br-1
 
 # Step 2: SKIPPED test verification
 # Jump directly to presenting options
@@ -275,7 +275,7 @@ git merge feature-branch
 
 ```bash
 # After closing epic
-bd close bd-1 ✓
+br close br-1 ✓
 
 # MANDATORY: Verify tests BEFORE presenting options
 Dispatch hyperpowers:test-runner agent: "Run: cargo test"
@@ -447,7 +447,7 @@ All of these mean: **STOP. Follow the process.**
 <verification_checklist>
 Before completing:
 
-- [ ] bd epic closed (all child tasks closed)
+- [ ] br epic closed (all child tasks closed)
 - [ ] Tests verified passing (via test-runner agent)
 - [ ] Presented exactly 4 options (no open-ended questions)
 - [ ] Waited for user choice (didn't assume)
@@ -471,20 +471,20 @@ hyperpowers:executing-plans → hyperpowers:review-implementation → hyperpower
 
 **This skill calls:**
 - hyperpowers:test-runner agent (for test verification)
-- bd commands (epic management)
+- br commands (epic management)
 - gh commands (PR creation)
 
-**CRITICAL:** Never read `.beads/issues.jsonl` directly. Always use bd CLI commands.
+**CRITICAL:** Never read `.beads/issues.jsonl` directly. Always use br CLI commands.
 </integration>
 
 <resources>
 **Detailed guides:**
 - [Git worktree management](resources/worktree-guide.md)
 - [PR description templates](resources/pr-templates.md)
-- [bd epic reference in PRs](resources/bd-pr-integration.md)
+- [br epic reference in PRs](resources/br-pr-integration.md)
 
 **When stuck:**
-- Tasks won't close → Check bd status, verify all child tasks done
+- Tasks won't close → Check br status, verify all child tasks done
 - Tests fail → Fix before presenting options (can't proceed)
 - User unsure → Explain options, but don't make choice for them
 - Worktree won't remove → Might have uncommitted changes, ask user

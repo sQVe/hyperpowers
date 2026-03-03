@@ -117,7 +117,7 @@ function detectInvocationCorrections(promptText) {
     const sreAsAgentPatterns = [
         /hyperpowers:sre-task-refinement\s*\(/i,
         /agent type ['"]?hyperpowers:sre-task-refinement['"]?\s+not found/i,
-        /sre\s+refinement\s+on\s+(task\s+)?bd-\d+/i
+        /sre\s+refinement\s+on\s+(task\s+)?br-\d+/i
     ];
 
     const matchedSreAsAgent = sreAsAgentPatterns.some((pattern) => pattern.test(promptText));

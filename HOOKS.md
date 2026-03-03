@@ -64,10 +64,10 @@ Example: `Task(subagent_type="hyperpowers:test-runner", prompt="Run: git commit.
 **How it works:**
 1. Intercepts Read and Grep tool calls
 2. Checks if path contains `.beads/issues.jsonl`
-3. Blocks the operation and suggests using `bd` CLI instead
+3. Blocks the operation and suggests using `br` CLI instead
 
 **Why blocking is necessary:**
-Direct file access bypasses bd validation and often fails due to file size. The bd CLI provides the correct interface.
+Direct file access bypasses br validation and often fails due to file size. The br CLI provides the correct interface.
 
 **File:** `hooks/pre-tool-use/01-block-pre-commit-edits.py`
 **Purpose:** Blocks direct Edit/Write modifications to `.git/hooks/pre-commit`
@@ -116,13 +116,13 @@ Direct file access bypasses bd validation and often fails due to file size. The 
 - `was_file_edited <file_path> [since]` - Check if specific file was edited
 - `get_repo_stats [since]` - Get edit counts by repo
 
-**File:** `hooks/post-tool-use/02-block-bd-truncation.py`
-**Purpose:** Prevents bd tasks from being created with truncated specifications
-**Input:** `{"tool_name": "Bash", "tool_input": {"command": "bd create ..."}}`
+**File:** `hooks/post-tool-use/02-block-br-truncation.py`
+**Purpose:** Prevents br tasks from being created with truncated specifications
+**Input:** `{"tool_name": "Bash", "tool_input": {"command": "br create ..."}}`
 **Output:** `{"hookSpecificOutput": {"permissionDecision": "deny", ...}}` (blocking)
 
 **How it works:**
-1. Intercepts Bash tool calls containing `bd create` or `bd update`
+1. Intercepts Bash tool calls containing `br create` or `br update`
 2. Scans command for truncation markers like "[Remaining steps truncated]", "[etc.]", etc.
 3. Blocks the command if truncation detected
 4. Provides helpful error message explaining the issue
@@ -137,7 +137,7 @@ Direct file access bypasses bd validation and often fails due to file size. The 
 - `(abbreviated)`
 
 **Why blocking is necessary:**
-Truncated bd tasks lead to incomplete implementations. Brainstorming, writing-plans, and sre-task-refinement skills sometimes generate partial specifications marked with truncation indicators. This hook prevents these from being saved, forcing complete specifications.
+Truncated br tasks lead to incomplete implementations. Brainstorming, writing-plans, and sre-task-refinement skills sometimes generate partial specifications marked with truncation indicators. This hook prevents these from being saved, forcing complete specifications.
 
 **File:** `hooks/post-tool-use/03-block-pre-commit-bash.py`
 **Purpose:** Blocks Bash commands that modify `.git/hooks/pre-commit`

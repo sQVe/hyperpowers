@@ -323,7 +323,7 @@ Before marking work complete:
 
 **This skill is called by:**
 - fixing-bugs (write failing test reproducing bug)
-- executing-plans (when implementing bd tasks)
+- executing-plans (when implementing br tasks)
 - refactoring-safely (keep tests green while refactoring)
 
 **Agents used:**

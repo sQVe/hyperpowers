@@ -1,0 +1,5 @@
+# Beads Project Configuration
+# Uncomment to override defaults:
+# issue_prefix: hyperpowers
+# default_priority: 2
+# default_type: task

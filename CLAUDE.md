@@ -17,7 +17,7 @@ Inspired by [obra/superpowers](https://github.com/obra/superpowers).
 The user will frequently describe issues like:
 - "Claude did X in another session and it was wrong"
 - "I got this error: [some error from another project]"
-- "Claude truncated the bd task and that caused problems"
+- "Claude truncated the br task and that caused problems"
 - "Claude edited .git/hooks/pre-commit with sed"
 
 **CRITICAL - These are NOT problems for you to investigate or debug.**
@@ -34,20 +34,20 @@ When the user describes an issue from another session, they are:
 **Bad response (trying to fix the other session):**
 ```
 Let me investigate that error. Can you show me the file where the truncation occurred?
-Let me check the bd task that was created. What was the full command?
+Let me check the br task that was created. What was the full command?
 ```
 
 **Good response (improving the plugin):**
 ```
 This is a pattern we can prevent with a hook. Let me create a PostToolUse hook
-that blocks bd commands containing truncation markers.
+that blocks br commands containing truncation markers.
 ```
 
 ### Translation Guide
 
 | What user says | What they actually want |
 |----------------|------------------------|
-| "Claude truncated the bd task" | Create hook to block bd truncation |
+| "Claude truncated the br task" | Create hook to block br truncation |
 | "Claude edited pre-commit with sed" | Create hook to block pre-commit modifications |
 | "The test-runner agent didn't activate" | Improve skill-rules.json triggers |
 | "Claude ignored the skill" | Improve skill description or add hook |
@@ -69,10 +69,10 @@ You cannot access other sessions. You cannot fix past problems. You CAN prevent 
 - Create PostToolUse hook blocking Bash commands modifying pre-commit
 - Update HOOKS.md with documentation
 
-**User:** "The bd task had '[Remaining steps truncated]' which caused incomplete implementation"
+**User:** "The br task had '[Remaining steps truncated]' which caused incomplete implementation"
 
 **Correct response:**
-- Create PostToolUse hook blocking bd create/update with truncation markers
+- Create PostToolUse hook blocking br create/update with truncation markers
 - Add regex patterns for all truncation variations
 - Test hook with sample commands
 
@@ -120,22 +120,24 @@ Skills are invoked through slash commands that expand to prompts. The flow is:
 3. Claude uses the Skill tool to load `skills/writing-plans/SKILL.md`
 4. Claude follows the skill's detailed instructions
 
-### bd Integration
+### br (beads_rust) integration
 
-Many skills integrate with `bd` (a task management tool). The workflows expect:
+Many skills integrate with `br` (a task management tool). The workflows expect:
 
 - **Epics** - High-level features/initiatives (created by writing-plans)
 - **Tasks** - Specific implementation steps (created by writing-plans, executed by executing-plans)
 - **Dependencies** - Task relationships (blocking, parent-child)
 - **Status tracking** - Open, in-progress, done, ready
 
-Common bd commands:
+**Note:** `br` is non-invasive and never executes git commands. After `br sync --flush-only`, you must manually run `git add .beads/ && git commit`.
+
+Common br commands:
 ```bash
-bd list --type epic --status open       # Find open epics
-bd ready                                 # Show ready tasks
-bd show bd-1                            # Show task details
-bd dep tree bd-1                        # Show task tree
-bd status bd-3 --status in-progress     # Update task status
+br list --type epic --status open       # Find open epics
+br ready                                 # Show ready tasks
+br show br-1                            # Show task details
+br dep tree br-1                        # Show task tree
+br update br-3 --status in_progress     # Update task status
 ```
 
 ### Agent System
@@ -153,7 +155,7 @@ Specialized agents run in separate contexts to handle specific tasks:
 
 To avoid duplication, common elements are centralized in `skills/common-patterns/`:
 
-- `bd-commands.md` - Standard bd command examples
+- `br-commands.md` - Standard br command examples
 - `common-anti-patterns.md` - Anti-patterns to avoid
 - `common-rationalizations.md` - Excuses that signal failure
 
@@ -167,8 +169,8 @@ Complete workflow from idea to PR:
 
 1. **Brainstorming** (`/hyperpowers:brainstorm`) - Socratic questioning to refine requirements
 2. **SRE Task Refinement** (optional, `/hyperpowers:sre-task-refinement`) - Uses Opus 4.1 to identify corner cases
-3. **Writing Plans** (`/hyperpowers:write-plan`) - Creates detailed bd epic with tasks
-4. **Executing Plans** (`/hyperpowers:execute-plan`) - Implements tasks continuously, updating bd
+3. **Writing Plans** (`/hyperpowers:write-plan`) - Creates detailed br epic with tasks
+4. **Executing Plans** (`/hyperpowers:execute-plan`) - Implements tasks continuously, updating br
 5. **Review Implementation** (`/hyperpowers:review-implementation`) - Verifies against spec
 6. **Finishing Branch** - Creates PR, handles cleanup
 
@@ -188,12 +190,12 @@ The `test-driven-development` skill enforces this rigorously.
 
 Complete workflow for fixing bugs systematically:
 
-1. **Create bd Bug Issue** - Track the bug with reproduction steps
+1. **Create br Bug Issue** - Track the bug with reproduction steps
 2. **Debugging with Tools** - Use debuggers, internet-researcher, codebase-investigator to find root cause
 3. **Write Failing Test** (RED phase) - Reproduce the bug in a test
 4. **Implement Fix** (GREEN phase) - Minimal fix addressing root cause
 5. **Verify** - Run full test suite via test-runner agent, check for regressions
-6. **Close bd Issue** - Document fix and close
+6. **Close br Issue** - Document fix and close
 
 **Key Skills:**
 - `debugging-with-tools` - Systematic investigation using debuggers, internet research, and agents
@@ -277,7 +279,7 @@ From RECOMMENDATIONS.md:
 - ✅ Refactoring workflows (test-preserving transformations)
 - ✅ Advanced task management (splitting, merging, dependencies, metrics)
 - ✅ Quality culture (TDD, verification, SRE review)
-- ✅ Clean bd integration
+- ✅ Clean br integration
 
 **Missing (see RECOMMENDATIONS.md for details):**
 - ❌ Incident response

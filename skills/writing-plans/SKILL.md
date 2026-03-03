@@ -1,10 +1,10 @@
 ---
 name: writing-plans
-description: Use to expand bd tasks with detailed implementation steps - adds exact file paths, complete code, verification commands assuming zero context
+description: Use to expand br tasks with detailed implementation steps - adds exact file paths, complete code, verification commands assuming zero context
 ---
 
 <skill_overview>
-Enhance bd tasks with comprehensive implementation details for engineers with zero codebase context. Expand checklists into explicit steps: which files, complete code examples, exact commands, verification steps.
+Enhance br tasks with comprehensive implementation details for engineers with zero codebase context. Expand checklists into explicit steps: which files, complete code examples, exact commands, verification steps.
 </skill_overview>
 
 <rigidity_level>
@@ -21,7 +21,7 @@ Adapt implementation details to actual codebase state. Never use placeholders or
 | **Verify Codebase** | Use `codebase-investigator` agent | NEVER verify yourself, report discrepancies |
 | **Draft Steps** | Write bite-sized (2-5 min) actions | Follow TDD cycle for new features |
 | **Present to User** | Show COMPLETE expansion FIRST | Then ask for approval |
-| **Update bd** | `bd update bd-N --design "..."` | Only after user approves |
+| **Update br** | `br update br-N --design "..."` | Only after user approves |
 | **Continue** | Move to next task automatically | NO asking permission between tasks |
 
 **FORBIDDEN:** Placeholders like `[Full implementation steps as detailed above]`
@@ -33,7 +33,7 @@ Adapt implementation details to actual codebase state. Never use placeholders or
 **Use after hyperpowers:sre-task-refinement or anytime tasks need more detail.**
 
 Symptoms:
-- bd tasks have implementation checklists but need expansion
+- br tasks have implementation checklists but need expansion
 - Engineer needs step-by-step guide with zero context
 - Want explicit file paths, complete code examples
 - Need exact verification commands
@@ -45,20 +45,20 @@ Symptoms:
 ## 1. Identify Tasks to Expand
 
 **User specifies scope:**
-- Single: "Expand bd-2"
-- Range: "Expand bd-2 through bd-5"
-- Epic: "Expand all tasks in bd-1"
+- Single: "Expand br-2"
+- Range: "Expand br-2 through br-5"
+- Epic: "Expand all tasks in br-1"
 
 **If epic:**
 ```bash
-bd dep tree bd-1  # View complete dependency tree
+br dep tree br-1  # View complete dependency tree
 # Note all child task IDs
 ```
 
 **Create TodoWrite tracker:**
 ```
-- [ ] bd-2: [Task Title]
-- [ ] bd-3: [Task Title]
+- [ ] br-2: [Task Title]
+- [ ] br-3: [Task Title]
 ...
 ```
 
@@ -68,23 +68,23 @@ bd dep tree bd-1  # View complete dependency tree
 
 ```bash
 # Mark in TodoWrite: in_progress
-bd show bd-3  # Read current task design
+br show br-3  # Read current task design
 ```
 
 ### 2b. Verify Codebase State
 
 **CRITICAL: Use codebase-investigator agent, NEVER verify yourself.**
 
-**Provide agent with bd assumptions:**
+**Provide agent with br assumptions:**
 ```
-Assumptions from bd-3:
+Assumptions from br-3:
 - Auth service should be in src/services/auth.ts with login() and logout()
 - User model in src/models/user.ts with email and password fields
 - Test file at tests/services/auth.test.ts
 - Uses bcrypt dependency for password hashing
 
 Verify these assumptions and report:
-1. What exists vs what bd-3 expects
+1. What exists vs what br-3 expects
 2. Structural differences (different paths, functions, exports)
 3. Missing or additional components
 4. Current dependency versions
@@ -126,12 +126,12 @@ For new features (follow test-driven-development):
 
 **Format:**
 ```markdown
-**bd-[N]: [Task Title]**
+**br-[N]: [Task Title]**
 
-**From bd issue:**
-- Goal: [From bd show]
-- Effort estimate: [From bd issue]
-- Success criteria: [From bd issue]
+**From br issue:**
+- Goal: [From br show]
+- Effort estimate: [From br issue]
+- Success criteria: [From br issue]
 
 **Codebase verification findings:**
 - ✓ Confirmed: [what matched]
@@ -167,16 +167,16 @@ pytest tests/auth/test_login.py::test_login_with_valid_credentials
 ```
 
 **THEN ask for approval using AskUserQuestion:**
-- Question: "Is this expansion approved for bd-[N]?"
+- Question: "Is this expansion approved for br-[N]?"
 - Options:
   - "Approved - continue to next task"
   - "Needs revision"
   - "Other"
 
-### 2e. If Approved: Update bd and Continue
+### 2e. If Approved: Update br and Continue
 
 ```bash
-bd update bd-3 --design "[paste complete expansion]"
+br update br-3 --design "[paste complete expansion]"
 # Mark completed in TodoWrite
 # IMMEDIATELY continue to next task (NO asking permission)
 ```
@@ -190,7 +190,7 @@ bd update bd-3 --design "[paste complete expansion]"
 ## 3. After ALL Tasks Done
 
 ```
-All bd issues now contain detailed implementation steps.
+All br issues now contain detailed implementation steps.
 Epic ready for execution.
 ```
 
@@ -205,7 +205,7 @@ Epic ready for execution.
 <scenario>Developer writes placeholder text instead of actual implementation steps</scenario>
 
 <code>
-bd update bd-3 --design "## Goal
+br update br-3 --design "## Goal
 Implement user authentication
 
 ## Implementation
@@ -217,8 +217,8 @@ Implement user authentication
 
 <why_it_fails>
 **Placeholders defeat the purpose:**
-- Engineer executing bd-3 has zero context
-- There is no "above" to reference (bd issue is the source of truth)
+- Engineer executing br-3 has zero context
+- There is no "above" to reference (br issue is the source of truth)
 - Violates "exact instructions for zero-context engineer" principle
 - Makes task impossible to execute
 
@@ -233,7 +233,7 @@ Implement user authentication
 **Write actual content:**
 
 ```bash
-bd update bd-3 --design "## Goal
+br update br-3 --design "## Goal
 Implement user authentication
 
 ## Implementation
@@ -298,7 +298,7 @@ Writes expansion based on quick check:
 - Misses nuances (existing functions, imports, structure)
 - Creates conditional steps ("if exists")
 - Doesn't catch version mismatches
-- Doesn't report discrepancies from bd assumptions
+- Doesn't report discrepancies from br assumptions
 
 **Result:** Implementation plan may not match actual codebase state.
 </why_it_fails>
@@ -307,8 +307,8 @@ Writes expansion based on quick check:
 **Use codebase-investigator agent:**
 
 ```
-Dispatch agent with bd-3 assumptions:
-"bd-3 expects auth service in src/services/auth.ts with login() and logout() functions.
+Dispatch agent with br-3 assumptions:
+"br-3 expects auth service in src/services/auth.ts with login() and logout() functions.
 Verify:
 1. Does src/services/auth.ts exist?
 2. What functions does it export?
@@ -343,10 +343,10 @@ Step 2: Use argon2 (already installed 0.31.2) not bcrypt
 <scenario>Developer asks permission between each task validation instead of continuing automatically</scenario>
 
 <code>
-After user approves bd-3 expansion:
+After user approves br-3 expansion:
 
-Developer: "bd-3 expansion approved and updated in bd.
-Should I continue to bd-4 now? What's your preference?"
+Developer: "br-3 expansion approved and updated in br.
+Should I continue to br-4 now? What's your preference?"
 
 [Waits for user response]
 </code>
@@ -362,19 +362,19 @@ Should I continue to bd-4 now? What's your preference?"
 </why_it_fails>
 
 <correction>
-**After user approves bd-3:**
+**After user approves br-3:**
 
 ```bash
-bd update bd-3 --design "[expansion]"  # Update bd
+br update br-3 --design "[expansion]"  # Update br
 # Mark completed in TodoWrite
 ```
 
-**IMMEDIATELY continue to bd-4:**
+**IMMEDIATELY continue to br-4:**
 ```bash
-bd show bd-4  # Read next task
-# Dispatch codebase-investigator with bd-4 assumptions
+br show br-4  # Read next task
+# Dispatch codebase-investigator with br-4 assumptions
 # Draft expansion
-# Present bd-4 expansion to user
+# Present br-4 expansion to user
 ```
 
 **NO asking:** "Should I continue?" or "What's your preference?"
@@ -400,7 +400,7 @@ bd show bd-4  # Read next task
    - ✅ REQUIRED: Complete code, exact paths, real commands
 
 2. **Use codebase-investigator agent** → Never verify yourself
-   - Agent gets bd assumptions
+   - Agent gets br assumptions
    - Agent reports discrepancies
    - You adjust plan to match reality
 
@@ -434,12 +434,12 @@ Before marking each task complete in TodoWrite:
 - [ ] Used codebase-investigator agent (not manual verification)
 - [ ] Presented COMPLETE expansion to user (showed full text)
 - [ ] User approved expansion (via AskUserQuestion)
-- [ ] Updated bd with actual content (no placeholders)
+- [ ] Updated br with actual content (no placeholders)
 - [ ] No meta-references in design field
 
 Before finishing all tasks:
 - [ ] All tasks in TodoWrite marked completed
-- [ ] All bd issues updated with expansions
+- [ ] All br issues updated with expansions
 - [ ] No conditional steps ("if exists")
 - [ ] Complete code examples in all steps
 - [ ] Exact file paths and commands throughout
@@ -465,7 +465,7 @@ Before finishing all tasks:
 <resources>
 
 **Detailed guidance:**
-- [bd command reference](../common-patterns/bd-commands.md)
+- [br command reference](../common-patterns/br-commands.md)
 - [Task structure examples](resources/task-examples.md) (if exists)
 
 **When stuck:**

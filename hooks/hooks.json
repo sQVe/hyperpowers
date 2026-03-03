@@ -56,7 +56,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-tool-use/02-block-bd-truncation.py"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-tool-use/02-block-br-truncation.py"
           },
           {
             "type": "command",

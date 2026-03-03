@@ -20,8 +20,8 @@ No shortcuts. No "should work". No partial verification. Run it, prove it.
 | **Tests pass** | Run full test command, see 0 failures | Previous run, "should pass" |
 | **Build succeeds** | Run build, see exit 0 | Linter passing |
 | **Bug fixed** | Test original symptom, passes | Code changed |
-| **Task complete** | Check all success criteria, run verifications | "Implemented bd-3" |
-| **Epic complete** | `bd list --status open --parent bd-1` shows 0 | "All tasks done" |
+| **Task complete** | Check all success criteria, run verifications | "Implemented br-3" |
+| **Epic complete** | `br list --status open --parent br-1` shows 0 | "All tasks done" |
 
 **Iron Law:** NO COMPLETION CLAIMS WITHOUT FRESH VERIFICATION EVIDENCE
 
@@ -137,10 +137,10 @@ Investigating...
 </example>
 
 <example>
-<scenario>Developer closes bd task without verifying success criteria</scenario>
+<scenario>Developer closes br task without verifying success criteria</scenario>
 
 <code>
-bd-3 success criteria:
+br-3 success criteria:
 - [ ] All functions fully implemented (no stubs, no TODOs)
 - [ ] Tests written and passing: test_generate_token, test_verify_token
 - [ ] Pre-commit hooks pass
@@ -149,7 +149,7 @@ Developer implements token functions.
 
 Developer thinks: "I implemented everything, task complete"
 
-Runs: bd close bd-3
+Runs: br close br-3
 
 [No verification commands run]
 </code>
@@ -189,7 +189,7 @@ All checks passed:
 
 **THEN close task:**
 ```bash
-bd close bd-3
+br close br-3
 ```
 
 **Result:** Task actually complete, all criteria met with evidence.
@@ -273,7 +273,7 @@ Ready to commit.
    - Never run `git commit` or `cargo test` directly if output is verbose
 
 3. **Verify ALL success criteria** → Not just "tests pass"
-   - Read each criterion from bd task
+   - Read each criterion from br task
    - Run verification for each
    - Check all pass before closing
 
@@ -315,16 +315,16 @@ Before claiming build succeeds:
 - [ ] Saw exit code 0
 - [ ] Checked for compilation errors
 
-Before closing bd task:
-- [ ] Re-read success criteria from bd task
+Before closing br task:
+- [ ] Re-read success criteria from br task
 - [ ] Ran verification for each criterion
 - [ ] Saw evidence all pass
 - [ ] THEN closed task
 
-Before closing bd epic:
-- [ ] Ran `bd list --status open --parent bd-1`
+Before closing br epic:
+- [ ] Ran `br list --status open --parent br-1`
 - [ ] Saw 0 open tasks
-- [ ] Ran `bd dep tree bd-1`
+- [ ] Ran `br dep tree br-1`
 - [ ] Confirmed all tasks closed
 - [ ] THEN closed epic
 
@@ -357,7 +357,7 @@ Before closing bd epic:
 **Verification patterns:**
 - Tests: Use test-runner agent, check 0 failures
 - Build: Run build command, check exit 0
-- bd task: Verify each success criterion
-- bd epic: Check all tasks closed with bd list/dep tree
+- br task: Verify each success criterion
+- br epic: Check all tasks closed with br list/dep tree
 
 </resources>

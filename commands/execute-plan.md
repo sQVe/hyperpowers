@@ -8,7 +8,7 @@ Use the hyperpowers:executing-plans skill exactly as written.
 
 1. First run: Executes first ready task → STOP
 2. User reviews implementation, clears context
-3. Next run: Resumes from bd state, executes next task → STOP
+3. Next run: Resumes from br state, executes next task → STOP
 4. Repeat until epic complete
 
 **Checkpoints:** Each task execution ends with a STOP checkpoint. User must run this command again to continue.

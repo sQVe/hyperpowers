@@ -48,9 +48,9 @@ Result: ✓ All tests pass
 1. Test already exists (the failing test)
 2. Fix: Framework linked
 3. Verification: Tests pass
-4. Update bd:
+4. Update br:
    ```bash
-   bd close bd-123
+   br close br-123
    ```
 
 **Time:** 15 minutes systematic vs. 2+ hours guessing

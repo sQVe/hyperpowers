@@ -1,14 +1,14 @@
 ---
 name: fixing-bugs
-description: Use when encountering a bug - complete workflow from discovery through debugging, bd issue, test-driven fix, verification, and closure
+description: Use when encountering a bug - complete workflow from discovery through debugging, br issue, test-driven fix, verification, and closure
 ---
 
 <skill_overview>
-Bug fixing is a complete workflow: reproduce, track in bd, debug systematically, write test, fix, verify, close. Every bug gets a bd issue and regression test.
+Bug fixing is a complete workflow: reproduce, track in br, debug systematically, write test, fix, verify, close. Every bug gets a br issue and regression test.
 </skill_overview>
 
 <rigidity_level>
-LOW FREEDOM - Follow exact workflow: create bd issue → debug with tools → write failing test → fix → verify → close.
+LOW FREEDOM - Follow exact workflow: create br issue → debug with tools → write failing test → fix → verify → close.
 
 Never skip tracking or regression test. Use debugging-with-tools for investigation, test-driven-development for fix.
 </rigidity_level>
@@ -17,14 +17,14 @@ Never skip tracking or regression test. Use debugging-with-tools for investigati
 
 | Step | Action | Command/Skill |
 |------|--------|---------------|
-| **1. Track** | Create bd bug issue | `bd create "Bug: [description]" --type bug` |
+| **1. Track** | Create br bug issue | `br create "Bug: [description]" --type bug` |
 | **2. Debug** | Systematic investigation | Use `debugging-with-tools` skill |
 | **3. Test (RED)** | Write failing test reproducing bug | Use `test-driven-development` skill |
 | **4. Fix (GREEN)** | Implement fix | Minimal code to pass test |
 | **5. Verify** | Run full test suite | Use `verification-before-completion` skill |
-| **6. Classify** | Classify status and close | `bd close bd-123` |
+| **6. Classify** | Classify status and close | `br close br-123` |
 
-**FORBIDDEN:** Fix without bd issue, fix without regression test
+**FORBIDDEN:** Fix without br issue, fix without regression test
 **REQUIRED:** Every bug gets tracked, tested, verified before closing
 
 </quick_reference>
@@ -36,7 +36,7 @@ After implementing a fix, classify its status:
 
 | Status | Definition | Next Action |
 |--------|------------|-------------|
-| **FIXED** | Root cause addressed, regression test passes, full suite passes | Close bd issue |
+| **FIXED** | Root cause addressed, regression test passes, full suite passes | Close br issue |
 | **PARTIALLY_FIXED** | Some aspects addressed, others remain | Document what's left, keep issue open |
 | **NOT_ADDRESSED** | Fix doesn't address the actual bug | Return to debugging phase |
 | **CANNOT_DETERMINE** | Insufficient info to verify fix | Gather more reproduction data |
@@ -56,23 +56,23 @@ After implementing a fix, classify its status:
 - Regression from recent change
 - Production issue (non-emergency)
 
-**Production emergencies:** Abbreviated workflow OK (hotfix first), but still create bd issue and add regression tests afterward.
+**Production emergencies:** Abbreviated workflow OK (hotfix first), but still create br issue and add regression tests afterward.
 </when_to_use>
 
 <the_process>
 
-## 1. Create bd Bug Issue
+## 1. Create br Bug Issue
 
 **Track from the start:**
 
 ```bash
-bd create "Bug: [Clear description]" --type bug --priority P1
-# Returns: bd-123
+br create "Bug: [Clear description]" --type bug --priority P1
+# Returns: br-123
 ```
 
 **Document:**
 ```bash
-bd edit bd-123 --design "
+br edit br-123 --design "
 ## Bug Description
 [What's wrong]
 
@@ -104,9 +104,9 @@ Use Skill tool: hyperpowers:debugging-with-tools
 - Use codebase-investigator to understand context
 - Guide to root cause (not symptom)
 
-**Update bd issue with findings:**
+**Update br issue with findings:**
 ```bash
-bd edit bd-123 --design "[previous content]
+br edit br-123 --design "[previous content]
 
 ## Investigation
 [Root cause found via debugging]
@@ -121,7 +121,7 @@ Write test that reproduces the bug:
 
 ```python
 def test_rejects_empty_email():
-    """Regression test for bd-123: Empty email accepted"""
+    """Regression test for br-123: Empty email accepted"""
     with pytest.raises(ValidationError):
         create_user(email="")  # Should fail, currently passes
 ```
@@ -184,7 +184,7 @@ pytest tests/test_user.py::test_rejects_empty_email
 **REQUIRED: Classify fix status before closing:**
 
 ```bash
-bd edit bd-123 --design "[previous content]
+br edit br-123 --design "[previous content]
 
 ## Fix Status: FIXED
 **Evidence:**
@@ -200,22 +200,22 @@ bd edit bd-123 --design "[previous content]
 ## Regression Test
 [Test added: tests/test_user.py::test_rejects_empty_email]"
 
-bd close bd-123
+br close br-123
 ```
 
 **If status is not FIXED:**
-- **PARTIALLY_FIXED** → Document remaining work, create follow-up bd issue, keep original open
+- **PARTIALLY_FIXED** → Document remaining work, create follow-up br issue, keep original open
 - **NOT_ADDRESSED** → Return to Step 2 (debugging), do not close
 - **CANNOT_DETERMINE** → Gather more reproduction info before closing
 
-**Commit with bd reference:**
+**Commit with br reference:**
 ```bash
-git commit -m "fix(bd-123): Reject empty email in user creation
+git commit -m "fix(br-123): Reject empty email in user creation
 
 Adds validation to prevent empty strings.
 Regression test: test_rejects_empty_email
 
-Closes bd-123"
+Closes br-123"
 ```
 
 </the_process>
@@ -223,7 +223,7 @@ Closes bd-123"
 <examples>
 
 <example>
-<scenario>Developer fixes bug without creating bd issue or regression test</scenario>
+<scenario>Developer fixes bug without creating br issue or regression test</scenario>
 
 <code>
 Developer notices: Empty email accepted in user creation
@@ -237,12 +237,12 @@ def create_user(email: str):
 
 Commits: "fix: validate email"
 
-[No bd issue, no regression test]
+[No br issue, no regression test]
 </code>
 
 <why_it_fails>
 **No tracking:**
-- Work not tracked in bd (can't see what was fixed)
+- Work not tracked in br (can't see what was fixed)
 - No link between commit and bug
 - Can't verify fix meets requirements
 
@@ -263,8 +263,8 @@ Commits: "fix: validate email"
 
 ```bash
 # 1. Track
-bd create "Bug: Empty email accepted" --type bug
-# Returns: bd-123
+br create "Bug: Empty email accepted" --type bug
+# Returns: br-123
 
 # 2. Debug (use debugging-with-tools)
 # Investigation reveals: Email validation missing entirely
@@ -296,8 +296,8 @@ def create_user(email: str):
 pytest  # All tests pass now, including regression tests
 
 # 6. Close
-bd close bd-123
-git commit -m "fix(bd-123): Reject empty/whitespace email"
+br close br-123
+git commit -m "fix(br-123): Reject empty/whitespace email"
 ```
 
 **Result:** Bug fixed, tracked, tested, won't regress.
@@ -476,8 +476,8 @@ void registrationRequiresEmail() {
 
 ## Rules That Have No Exceptions
 
-1. **Every bug gets a bd issue** → Track from discovery to closure
-   - Create bd issue before fixing
+1. **Every bug gets a br issue** → Track from discovery to closure
+   - Create br issue before fixing
    - Document reproduction steps
    - Update with investigation findings
    - Close only after verified
@@ -503,7 +503,7 @@ void registrationRequiresEmail() {
 ## Common Excuses
 
 All of these mean: Stop, follow complete workflow:
-- "Quick fix, no need for bd issue"
+- "Quick fix, no need for br issue"
 - "Obvious bug, no need to debug"
 - "I'll add test later"
 - "Test passes, must be fixed"
@@ -514,16 +514,16 @@ All of these mean: Stop, follow complete workflow:
 <verification_checklist>
 
 Before claiming bug fixed:
-- [ ] bd issue created with reproduction steps
+- [ ] br issue created with reproduction steps
 - [ ] Used debugging-with-tools to find root cause
 - [ ] Wrote test that reproduces bug (RED phase)
 - [ ] Verified test FAILS before fix
 - [ ] Implemented fix addressing root cause
 - [ ] Verified test PASSES after fix
 - [ ] Ran full test suite (all pass)
-- [ ] Updated bd issue with fix details
-- [ ] Closed bd issue
-- [ ] Committed with bd reference
+- [ ] Updated br issue with fix details
+- [ ] Closed br issue
+- [ ] Committed with br reference
 
 </verification_checklist>
 
@@ -550,7 +550,7 @@ Before claiming bug fixed:
 
 **When stuck:**
 - Don't understand bug → Use debugging-with-tools skill
-- Tempted to skip tracking → Create bd issue first, always
+- Tempted to skip tracking → Create br issue first, always
 - Test passes immediately → Not testing the bug, rewrite test
 - Fix doesn't work → Return to debugging-with-tools, find actual root cause
 

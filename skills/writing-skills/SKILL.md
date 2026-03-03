@@ -88,7 +88,7 @@ Implement this feature."
 
 **Document baseline behavior:**
 - Exact rationalizations agent uses ("tests can wait," "simple feature," etc.)
-- What agent skips (tests, verification, bd task, etc.)
+- What agent skips (tests, verification, br task, etc.)
 - Patterns in failure modes
 
 **Example baseline result:**

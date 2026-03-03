@@ -4,7 +4,7 @@ description: Use when you have to refine subtasks into actionable plans ensuring
 ---
 
 <skill_overview>
-Review bd task plans with Google Fellow SRE perspective to ensure junior engineer can execute without questions; catch edge cases, verify granularity, strengthen criteria, prevent production issues before implementation.
+Review br task plans with Google Fellow SRE perspective to ensure junior engineer can execute without questions; catch edge cases, verify granularity, strengthen criteria, prevent production issues before implementation.
 </skill_overview>
 
 <rigidity_level>
@@ -30,7 +30,7 @@ LOW FREEDOM - Follow the 8-category checklist exactly. Apply all categories to e
 
 <when_to_use>
 Use when:
-- Reviewing bd epic/feature plans before implementation
+- Reviewing br epic/feature plans before implementation
 - Need to ensure junior engineer can execute without questions
 - Want to catch edge cases and failure modes upfront
 - Need to verify task granularity (4-8 hour subtasks)
@@ -62,8 +62,8 @@ Don't use when:
 - [ ] Each subtask has clear deliverable?
 
 **If task >16 hours:**
-- Create subtasks with `bd create`
-- Link with `bd dep add child parent --type parent-child`
+- Create subtasks with `br create`
+- Link with `br dep add child parent --type parent-child`
 - Update parent to coordinator role
 
 ---
@@ -115,7 +115,7 @@ Don't use when:
 
 **Verify with:**
 ```bash
-bd dep tree bd-1  # Show full dependency tree
+br dep tree br-1  # Show full dependency tree
 ```
 
 ---
@@ -224,7 +224,7 @@ For each task in the plan:
 
 **Step 1: Read the task**
 ```bash
-bd show bd-3
+br show br-3
 ```
 
 **Step 2: Apply all 8 checklist categories**
@@ -247,10 +247,10 @@ Take notes:
 
 **Step 4: Update the task**
 
-Use `bd update` to add missing information:
+Use `br update` to add missing information:
 
 ```bash
-bd update bd-3 --design "$(cat <<'EOF'
+br update br-3 --design "$(cat <<'EOF'
 ## Goal
 [Original goal, preserved]
 
@@ -293,7 +293,7 @@ EOF
 
 **Step 5: Verify no placeholder text (MANDATORY)**
 
-After updating, read back with `bd show bd-N` and verify:
+After updating, read back with `br show br-N` and verify:
 - ✅ All sections contain actual content, not meta-references
 - ✅ No placeholder text like "[detailed above]", "[as specified]", "[will be added]"
 - ✅ Implementation steps fully written with actual code examples
@@ -308,28 +308,28 @@ If task >16 hours, create subtasks:
 
 ```bash
 # Create first subtask
-bd create "Subtask 1: [Specific Component]" \
+br create "Subtask 1: [Specific Component]" \
   --type task \
   --priority 1 \
   --design "[Complete subtask design with all 7 categories addressed]"
-# Returns bd-10
+# Returns br-10
 
 # Create second subtask
-bd create "Subtask 2: [Another Component]" \
+br create "Subtask 2: [Another Component]" \
   --type task \
   --priority 1 \
   --design "[Complete subtask design]"
-# Returns bd-11
+# Returns br-11
 
 # Link subtasks to parent with parent-child relationship
-bd dep add bd-10 bd-3 --type parent-child  # bd-10 is child of bd-3
-bd dep add bd-11 bd-3 --type parent-child  # bd-11 is child of bd-3
+br dep add br-10 br-3 --type parent-child  # br-10 is child of br-3
+br dep add br-11 br-3 --type parent-child  # br-11 is child of br-3
 
 # Add sequential dependencies if needed (LATER depends on EARLIER)
-bd dep add bd-11 bd-10  # bd-11 depends on bd-10 (do bd-10 first)
+br dep add br-11 br-10  # br-11 depends on br-10 (do br-10 first)
 
 # Update parent to coordinator
-bd update bd-3 --design "$(cat <<'EOF'
+br update br-3 --design "$(cat <<'EOF'
 ## Goal
 Coordinate implementation of [feature]. Broken into N subtasks.
 
@@ -356,7 +356,7 @@ After reviewing all tasks:
 [APPROVE ✅ / NEEDS REVISION ⚠️ / REJECT ❌]
 
 ### Dependency Structure Review
-[Output of `bd dep tree [epic-id]`]
+[Output of `br dep tree [epic-id]`]
 
 **Structure Quality**: [✅ Correct / ❌ Issues found]
 - [Comments on parent-child relationships]
@@ -365,7 +365,7 @@ After reviewing all tasks:
 
 ### Task-by-Task Review
 
-#### [Task Name] (bd-N)
+#### [Task Name] (br-N)
 **Type**: [epic/feature/task]
 **Status**: [✅ Ready / ⚠️ Needs Minor Improvements / ❌ Needs Major Revision]
 **Estimated Effort**: [X hours] ([✅ Good / ❌ Too large - needs breakdown])
@@ -383,7 +383,7 @@ After reviewing all tasks:
 - [Failure modes not addressed]
 
 **Changes Made**:
-- [Specific improvements added via `bd update`]
+- [Specific improvements added via `br update`]
 
 ---
 
@@ -392,9 +392,9 @@ After reviewing all tasks:
 ### Summary of Changes
 
 **Issues Updated**:
-- bd-3 - Added edge case handling for Unicode, regex backtracking risks
-- bd-5 - Broke into 3 subtasks (was 40 hours, now 3x8 hours)
-- bd-7 - Strengthened success criteria (added test names, verification commands)
+- br-3 - Added edge case handling for Unicode, regex backtracking risks
+- br-5 - Broke into 3 subtasks (was 40 hours, now 3x8 hours)
+- br-7 - Strengthened success criteria (added test names, verification commands)
 
 ### Critical Gaps Across Plan
 1. [Pattern of missing items across multiple tasks]
@@ -424,7 +424,7 @@ After reviewing all tasks:
 <scenario>Developer reviews task but skips edge case analysis (Category 6)</scenario>
 
 <code>
-# Review of bd-3: Implement VIN scanner
+# Review of br-3: Implement VIN scanner
 
 ## Checklist review:
 1. Granularity: ✅ 6-8 hours
@@ -461,7 +461,7 @@ Conclusion: "Task looks good, approve ✅"
 **Apply Category 6 rigorously:**
 
 ```markdown
-## Edge Case Analysis for bd-3: VIN Scanner
+## Edge Case Analysis for br-3: VIN Scanner
 
 Ask for EVERY task:
 - Malformed input? VIN has checksum - must validate, not just pattern match
@@ -479,7 +479,7 @@ Findings:
 
 **Update task:**
 ```bash
-bd update bd-3 --design "$(cat <<'EOF'
+br update br-3 --design "$(cat <<'EOF'
 [... original content ...]
 
 ## Key Considerations (ADDED BY SRE REVIEW)
@@ -526,9 +526,9 @@ EOF
 <scenario>Developer approves task with placeholder text (Red Flag #10)</scenario>
 
 <code>
-# Review of bd-5: Implement License Plate Scanner
+# Review of br-5: Implement License Plate Scanner
 
-bd show bd-5:
+br show br-5:
 
 ## Implementation Checklist
 - [ ] Create scanner module
@@ -572,7 +572,7 @@ Junior engineer: "What key considerations exist?"
 ```markdown
 ## Red Flag Check (Category 7)
 
-Read through bd-5 line by line:
+Read through br-5 line by line:
 
 Line 15: "[Complete implementation steps detailed above]"
 ❌ PLACEHOLDER - "detailed above" is meta-reference, not actual content
@@ -589,7 +589,7 @@ Reason: Contains placeholder text - task not ready for implementation
 
 **Update task with actual content:**
 ```bash
-bd update bd-5 --design "$(cat <<'EOF'
+br update br-5 --design "$(cat <<'EOF'
 ## Implementation Checklist
 - [ ] Create src/scan/plugins/scanners/license_plate.rs
 - [ ] Implement LicensePlateScanner struct with ScanPlugin trait
@@ -638,7 +638,7 @@ EOF
 
 **Verify no placeholder text:**
 ```bash
-bd show bd-5
+br show br-5
 # Read entire output
 # Confirm: All sections have actual content
 # Confirm: No "[detailed above]", "[as specified]", "[will be added]"
@@ -660,9 +660,9 @@ bd show bd-5
 <scenario>Developer accepts vague success criteria (Category 3)</scenario>
 
 <code>
-# Review of bd-7: Implement Data Encryption
+# Review of br-7: Implement Data Encryption
 
-bd show bd-7:
+br show br-7:
 
 ## Success Criteria
 - [ ] Encryption is implemented correctly
@@ -702,7 +702,7 @@ Junior engineer: "What does 'tests work properly' mean?"
 **Apply Category 3 rigorously:**
 
 ```markdown
-## Success Criteria Analysis for bd-7
+## Success Criteria Analysis for br-7
 
 Current criteria:
 - [ ] Encryption is implemented correctly
@@ -721,7 +721,7 @@ DECISION: REJECT ❌
 
 **Update with measurable criteria:**
 ```bash
-bd update bd-7 --design "$(cat <<'EOF'
+br update br-7 --design "$(cat <<'EOF'
 [... original content ...]
 
 ## Success Criteria
@@ -782,7 +782,7 @@ EOF
 
 1. **Apply all 8 categories to every task** → No skipping any category for any task
 2. **Reject plans with placeholder text** → "[detailed above]", "[as specified]" = instant reject
-3. **Verify no placeholder after updates** → Read back with `bd show` and confirm actual content
+3. **Verify no placeholder after updates** → Read back with `br show` and confirm actual content
 4. **Break tasks >16 hours** → Create subtasks, don't accept large tasks
 5. **Strengthen vague criteria** → "Works correctly" → measurable verification commands
 6. **Add edge cases to every task** → Empty? Unicode? Concurrency? Failures?
@@ -811,8 +811,8 @@ Before completing SRE review:
 **Per task reviewed:**
 - [ ] Applied all 8 categories (Granularity, Implementability, Criteria, Dependencies, Safety, Edge Cases, Red Flags, Test Meaningfulness)
 - [ ] Checked for placeholder text in design field
-- [ ] Updated task with missing information via `bd update --design`
-- [ ] Verified updated task with `bd show` (no placeholders remain)
+- [ ] Updated task with missing information via `br update --design`
+- [ ] Verified updated task with `br show` (no placeholders remain)
 - [ ] Broke down any task >16 hours into subtasks
 - [ ] Strengthened vague success criteria to measurable
 - [ ] Added edge case analysis to Key Considerations
@@ -821,7 +821,7 @@ Before completing SRE review:
 
 **Overall plan:**
 - [ ] Reviewed ALL tasks/phases/subtasks (no exceptions)
-- [ ] Verified dependency structure with `bd dep tree`
+- [ ] Verified dependency structure with `br dep tree`
 - [ ] Documented findings for each task
 - [ ] Created summary of changes made
 - [ ] Provided clear recommendation (APPROVE/NEEDS REVISION/REJECT)
@@ -852,7 +852,7 @@ hyperpowers:executing-plans → creates new task → hyperpowers:sre-task-refine
 ```
 
 **This skill uses:**
-- bd commands (show, update, create, dep add, dep tree)
+- br commands (show, update, create, dep add, dep tree)
 - Google Fellow SRE perspective (20+ years distributed systems)
 - 8-category checklist (mandatory for every task)
 

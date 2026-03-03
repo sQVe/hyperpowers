@@ -47,12 +47,12 @@ All regex patterns in skill-rules.json have been designed to avoid catastrophic 
 - `I want to.*(add|create|build|implement)` - Safe: greedy but anchored by phrase
 
 **writing-plans**
-- `expand.*?(bd|task|plan)` - Safe: lazy quantifier, short distance expected
+- `expand.*?(br|task|plan)` - Safe: lazy quantifier, short distance expected
 - `enhance.*?with.*(steps|details)` - Safe: lazy quantifier
 
 **executing-plans**
-- `execute.*(plan|tasks|bd)` - Safe: greedy but short, anchored by "execute"
-- `implement.*?bd-\\d+` - Safe: lazy quantifier, specific target (bd-N)
+- `execute.*(plan|tasks|br)` - Safe: greedy but short, anchored by "execute"
+- `implement.*?br-\\d+` - Safe: lazy quantifier, specific target (br-N)
 
 **review-implementation**
 - `review.*?implementation` - Safe: lazy quantifier, close proximity expected
@@ -66,7 +66,7 @@ All regex patterns in skill-rules.json have been designed to avoid catastrophic 
 - `refine.*?(task|subtask|requirements)` - Safe: lazy quantifier
 - `(corner|edge).*(cases|scenarios)` - Safe: greedy but short
 
-**managing-bd-tasks**
+**managing-br-tasks**
 - `(split|divide).*?task` - Safe: lazy quantifier, close proximity
 - `(change|add|remove).*?dependencies` - Safe: lazy quantifier
 
@@ -128,7 +128,7 @@ These pattern types are confirmed safe:
 - `keyword.*?(target1|target2)` - Lazy quantifier to nearby target
 - `(action1|action2).*?object` - Action to object with lazy quantifier
 - `prefix.*(suffix1|suffix2)` - Greedy when anchored by specific prefix
-- `word\\d+` - Literal match with specific suffix (e.g., bd-\d+)
+- `word\\d+` - Literal match with specific suffix (e.g., br-\d+)
 
 ## Patterns to Avoid
 

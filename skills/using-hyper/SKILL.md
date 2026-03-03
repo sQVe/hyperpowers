@@ -130,12 +130,12 @@ If a skill has a checklist, YOU MUST create TodoWrite todos for EACH item.
 Skill has verification checklist:
 - [ ] All tests pass
 - [ ] No linter warnings
-- [ ] bd task updated
+- [ ] br task updated
 
 TodoWrite todos:
 1. Run all tests and verify they pass
 2. Run linter and verify no warnings
-3. Update bd task with completion status
+3. Update br task with completion status
 ```
 </the_process>
 
@@ -171,7 +171,7 @@ Claude: "I'm using hyperpowers:brainstorming to refine your requirements into a 
 Claude: "Now I'm using hyperpowers:writing-plans to create a detailed implementation plan."
 
 [Skill tool loads writing-plans]
-[Creates bd epic with tasks]
+[Creates br epic with tasks]
 
 Claude: "Now I'm using hyperpowers:executing-plans to implement the tasks iteratively."
 
@@ -183,7 +183,7 @@ Claude: "Now I'm using hyperpowers:executing-plans to implement the tasks iterat
 - Detailed plan user can review
 - Implementation follows proven workflow
 - Tests written first (TDD)
-- Progress tracked in bd
+- Progress tracked in br
 </correction>
 </example>
 
@@ -200,7 +200,7 @@ Claude (without using-hyper):
 
 <why_it_fails>
 - Skipped debugging-with-tools (no systematic investigation)
-- Skipped fixing-bugs workflow (no bd issue, no regression test)
+- Skipped fixing-bugs workflow (no br issue, no regression test)
 - "Obvious" fix might be wrong or incomplete
 - No verification that fix actually works
 - Will likely miss root cause and fix symptom
@@ -218,17 +218,17 @@ Claude: "I'm using hyperpowers:debugging-with-tools to investigate this systemat
 Claude: "Now I'm using hyperpowers:fixing-bugs to implement a complete fix."
 
 [Skill tool loads fixing-bugs]
-[Creates bd bug issue]
+[Creates br bug issue]
 [Writes failing test reproducing bug (RED)]
 [Implements minimal fix (GREEN)]
 [Runs full test suite via test-runner agent]
-[Verifies fix and closes bd issue]
+[Verifies fix and closes br issue]
 
 **What you gain:**
 - Root cause identified (not symptom)
 - Regression test prevents recurrence
 - Fix verified with evidence
-- Bug tracked in bd
+- Bug tracked in br
 - Complete workflow documented
 </correction>
 </example>
@@ -262,11 +262,11 @@ Claude: "I'm using hyperpowers:refactoring-safely to extract this validation log
 [Skill tool loads refactoring-safely]
 
 Step 1: Verify tests pass BEFORE refactoring
-Step 2: Create bd refactoring task
+Step 2: Create br refactoring task
 Step 3: Extract validation from first file → test → commit
 Step 4: Extract validation from second file → test → commit
 Step 5: Create shared validator → test → commit
-Step 6: Final verification → close bd task
+Step 6: Final verification → close br task
 
 **What you gain:**
 - Tests stay green throughout (safe refactoring)
@@ -316,7 +316,7 @@ These have LOW FREEDOM - follow the exact process:
 These have HIGH FREEDOM - adapt core principles to context:
 
 - hyperpowers:brainstorming (Socratic method, but questions vary)
-- hyperpowers:managing-bd-tasks (operations adapt to project)
+- hyperpowers:managing-br-tasks (operations adapt to project)
 - hyperpowers:sre-task-refinement (corner case analysis, but depth varies)
 
 **The skill itself tells you its rigidity level.** Check `<rigidity_level>` section.

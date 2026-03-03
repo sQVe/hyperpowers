@@ -1,6 +1,6 @@
 ---
 name: executing-plans
-description: Use to execute bd tasks iteratively - executes one task, reviews learnings, creates/refines next task, then STOPS for user review before continuing
+description: Use to execute br tasks iteratively - executes one task, reviews learnings, creates/refines next task, then STOPS for user review before continuing
 ---
 
 <codex_compat>
@@ -13,7 +13,7 @@ This skill was ported from Claude Code. In Codex:
 
 
 <skill_overview>
-Execute bd tasks one at a time with mandatory checkpoints: Load epic → Execute task → Review learnings → Create next task → Run SRE refinement → STOP. User clears context, reviews implementation, then runs command again to continue. Epic requirements are immutable, tasks adapt to reality.
+Execute br tasks one at a time with mandatory checkpoints: Load epic → Execute task → Review learnings → Create next task → Run SRE refinement → STOP. User clears context, reviews implementation, then runs command again to continue. Epic requirements are immutable, tasks adapt to reality.
 </skill_overview>
 
 <rigidity_level>
@@ -26,13 +26,13 @@ Epic requirements are immutable. Tasks adapt to discoveries. Do not skip checkpo
 
 | Step | Command | Purpose |
 |------|---------|---------|
-| **Load Epic** | `bd show bd-1` | Read immutable requirements once at start |
-| **Find Task** | `bd ready` | Get next ready task to execute |
-| **Start Task** | `bd update bd-2 --status in_progress` | Mark task active |
+| **Load Epic** | `br show br-1` | Read immutable requirements once at start |
+| **Find Task** | `br ready` | Get next ready task to execute |
+| **Start Task** | `br update br-2 --status in_progress` | Mark task active |
 | **Track Substeps** | TodoWrite for each implementation step | Prevent incomplete execution |
-| **Close Task** | `bd close bd-2` | Mark task complete after verification |
+| **Close Task** | `br close br-2` | Mark task complete after verification |
 | **Review** | Re-read epic, check learnings | Adapt next task to reality |
-| **Create Next** | `bd create "Task N"` | Based on learnings, not assumptions |
+| **Create Next** | `br create "Task N"` | Based on learnings, not assumptions |
 | **Refine** | Use `sre-task-refinement` skill | Corner-case analysis with Opus 4.1 |
 | **STOP** | Present summary to user | User reviews, clears context, runs command again |
 | **Final Check** | Use `review-implementation` skill | Verify all success criteria before closing epic |
@@ -45,7 +45,7 @@ Epic requirements are immutable. Tasks adapt to discoveries. Do not skip checkpo
 **Use after hyperpowers:writing-plans creates epic and first task.**
 
 Symptoms you need this:
-- bd epic exists with tasks ready to execute
+- br epic exists with tasks ready to execute
 - Need to implement features iteratively
 - Requirements clear, but implementation path will adapt
 - Want continuous learning between tasks
@@ -58,9 +58,9 @@ Symptoms you need this:
 This skill supports explicit resumption. When invoked:
 
 ```bash
-bd list --type epic --status open  # Find active epic
-bd ready                           # Check for ready tasks
-bd list --status in_progress       # Check for in-progress tasks
+br list --type epic --status open  # Find active epic
+br ready                           # Check for ready tasks
+br list --status in_progress       # Check for in-progress tasks
 ```
 
 **Fresh start:** No in-progress tasks, proceed to Step 1.
@@ -75,15 +75,15 @@ bd list --status in_progress       # Check for in-progress tasks
 - Context limit reached mid-task
 - Previous session ended unexpectedly
 
-**Do not ask "where did we leave off?"** - bd state tells you exactly where to resume.
+**Do not ask "where did we leave off?"** - br state tells you exactly where to resume.
 
 ## 1. Load Epic Context (Once at Start)
 
 Before executing ANY task, load the epic into context:
 
 ```bash
-bd list --type epic --status open  # Find epic
-bd show bd-1                       # Load epic details
+br list --type epic --status open  # Find epic
+br show br-1                       # Load epic details
 ```
 
 **Extract and keep in mind:**
@@ -97,9 +97,9 @@ bd show bd-1                       # Load epic details
 ## 2. Execute Current Ready Task
 
 ```bash
-bd ready                           # Find next task
-bd update bd-2 --status in_progress # Start it
-bd show bd-2                       # Read details
+br ready                           # Find next task
+br update br-2 --status in_progress # Start it
+br show br-2                       # Read details
 ```
 
 **CRITICAL - Create TodoWrite for ALL substeps:**
@@ -107,12 +107,12 @@ bd show bd-2                       # Read details
 Tasks contain 4-8 implementation steps. Create TodoWrite todos for each to prevent incomplete execution:
 
 ```
-- bd-2 Step 1: Write test (pending)
-- bd-2 Step 2: Run test RED (pending)
-- bd-2 Step 3: Implement function (pending)
-- bd-2 Step 4: Run test GREEN (pending)
-- bd-2 Step 5: Refactor (pending)
-- bd-2 Step 6: Commit (pending)
+- br-2 Step 1: Write test (pending)
+- br-2 Step 2: Run test RED (pending)
+- br-2 Step 3: Implement function (pending)
+- br-2 Step 4: Run test GREEN (pending)
+- br-2 Step 5: Refactor (pending)
+- br-2 Step 6: Commit (pending)
 ```
 
 **Execute steps:**
@@ -126,7 +126,7 @@ Tasks contain 4-8 implementation steps. Create TodoWrite todos for each to preve
 - If complete: Close task and commit
 
 ```bash
-bd close bd-2  # After ALL substeps done
+br close br-2  # After ALL substeps done
 ```
 
 ## 2a. When Hitting Obstacles
@@ -136,7 +136,7 @@ bd close bd-2  # After ALL substeps done
 When you hit a blocker or obstacle during implementation, do NOT automatically try alternative approaches. First check the epic's "Approaches Considered" section.
 
 **BEFORE switching approaches:**
-1. Re-read epic: `bd show bd-1`
+1. Re-read epic: `br show br-1`
 2. Find "Approaches Considered" section
 3. Check if the alternative you're considering was already rejected
 4. Read the "⚠️ REJECTED BECAUSE" reasoning
@@ -194,7 +194,7 @@ Before switching to a previously rejected approach, you MUST:
 
 **Re-read epic:**
 ```bash
-bd show bd-1  # Keep requirements fresh
+br show br-1  # Keep requirements fresh
 ```
 
 **Three cases:**
@@ -203,19 +203,19 @@ bd show bd-1  # Keep requirements fresh
 
 **B) Next task now redundant** (plan invalidation allowed):
 ```bash
-bd delete bd-4  # Remove wasteful task
-# Or update: bd update bd-4 --title "New work" --design "..."
+br delete br-4  # Remove wasteful task
+# Or update: br update br-4 --title "New work" --design "..."
 ```
 
 **C) Need new task** based on learnings:
 ```bash
-bd create "Task N: [Next Step Based on Reality]" \
+br create "Task N: [Next Step Based on Reality]" \
   --type feature \
   --design "## Goal
 [Deliverable based on what we learned]
 
 ## Context
-Completed bd-2: [discoveries]
+Completed br-2: [discoveries]
 
 ## Implementation
 [Steps reflecting current state, not assumptions]
@@ -224,8 +224,8 @@ Completed bd-2: [discoveries]
 - [ ] Specific outcomes
 - [ ] Tests passing"
 
-bd dep add bd-N bd-1 --type parent-child
-bd dep add bd-N bd-2 --type blocks
+br dep add br-N br-1 --type parent-child
+br dep add br-N br-2 --type blocks
 ```
 
 **REQUIRED - Run SRE refinement on new task:**
@@ -244,7 +244,7 @@ SRE refinement will:
 ## 4. Check Epic Success Criteria and STOP
 
 ```bash
-bd show bd-1  # Check success criteria
+br show br-1  # Check success criteria
 ```
 
 - ALL criteria met? → Step 5 (final validation)
@@ -255,14 +255,14 @@ bd show bd-1  # Check success criteria
 **Present summary to user:**
 
 ```markdown
-## Task bd-N Complete - Checkpoint
+## Task br-N Complete - Checkpoint
 
 ### What Was Done
 - [Summary of implementation]
 - [Key learnings/discoveries]
 
 ### Next Task Ready
-- bd-M: [Title]
+- br-M: [Title]
 - [Brief description of what's next]
 
 ### Epic Progress
@@ -312,18 +312,18 @@ Review-implementation will:
 <scenario>Developer closes task without completing all substeps, claims "mostly done"</scenario>
 
 <code>
-bd-2 has 6 implementation steps.
+br-2 has 6 implementation steps.
 
 TodoWrite shows:
-- ✅ bd-2 Step 1: Write test
-- ✅ bd-2 Step 2: Run test RED
-- ✅ bd-2 Step 3: Implement function
-- ⏸️ bd-2 Step 4: Run test GREEN (pending)
-- ⏸️ bd-2 Step 5: Refactor (pending)
-- ⏸️ bd-2 Step 6: Commit (pending)
+- ✅ br-2 Step 1: Write test
+- ✅ br-2 Step 2: Run test RED
+- ✅ br-2 Step 3: Implement function
+- ⏸️ br-2 Step 4: Run test GREEN (pending)
+- ⏸️ br-2 Step 5: Refactor (pending)
+- ⏸️ br-2 Step 6: Commit (pending)
 
-Developer thinks: "Function works, I'll close bd-2 and move on"
-Runs: bd close bd-2
+Developer thinks: "Function works, I'll close br-2 and move on"
+Runs: br close br-2
 </code>
 
 <why_it_fails>
@@ -341,7 +341,7 @@ Steps 4-6 skipped:
 Before closing ANY task:
 1. Check TodoWrite: All substeps completed?
 2. If incomplete: Continue with remaining substeps
-3. Only when ALL ✅: bd close bd-2
+3. Only when ALL ✅: br close br-2
 
 **Result:** Task actually complete, tests passing, code committed.
 </correction>
@@ -351,14 +351,14 @@ Before closing ANY task:
 <scenario>Developer discovers planned task is redundant, executes it anyway "because it's in the plan"</scenario>
 
 <code>
-bd-4 says: "Implement token refresh middleware"
+br-4 says: "Implement token refresh middleware"
 
-While executing bd-2, developer discovers:
+While executing br-2, developer discovers:
 - Token refresh middleware already exists in auth/middleware/refresh.ts
 - Works correctly, has tests
-- bd-4 would duplicate existing code
+- br-4 would duplicate existing code
 
-Developer thinks: "bd-4 is in the plan, I should do it anyway"
+Developer thinks: "br-4 is in the plan, I should do it anyway"
 Proceeds to implement duplicate middleware
 </code>
 
@@ -385,15 +385,15 @@ npm test -- refresh.spec.ts
 
 2. Delete redundant task:
 ```bash
-bd delete bd-4
+br delete br-4
 ```
 
 3. Document why:
 ```
-bd update bd-2 --design "...
+br update br-2 --design "...
 
 Discovery: Token refresh middleware already exists (auth/middleware/refresh.ts).
-Verified working with tests. bd-4 deleted as redundant."
+Verified working with tests. br-4 deleted as redundant."
 ```
 
 4. Create new task if needed (maybe "Integrate existing refresh middleware" instead)
@@ -406,7 +406,7 @@ Verified working with tests. bd-4 deleted as redundant."
 <scenario>Developer hits blocker, waters down epic requirement to "make it easier"</scenario>
 
 <code>
-Epic bd-1 anti-patterns say:
+Epic br-1 anti-patterns say:
 "FORBIDDEN: Using mocks for database integration tests. Must use real test database."
 
 Developer encounters:
@@ -433,7 +433,7 @@ Adds TODO: // TODO: Replace mocks with real DB later
 
 1. Re-read epic requirements and anti-patterns:
 ```bash
-bd show bd-1
+br show br-1
 ```
 
 2. Check if solution violates anti-pattern:
@@ -443,7 +443,7 @@ bd show bd-1
 
 **Option A - Research:**
 ```bash
-bd create "Research: Real DB test setup for [project]" \
+br create "Research: Real DB test setup for [project]" \
   --design "Find how this project sets up test databases.
 Check existing test files for patterns.
 Document setup process that meets anti-pattern requirements."
@@ -461,22 +461,22 @@ Is there existing test DB infrastructure I should use?"
 <scenario>Developer skips STOP checkpoint to "maintain momentum"</scenario>
 
 <code>
-Just completed bd-2 (authentication middleware).
-Created bd-3 (rate limiting endpoint).
-Ran SRE refinement on bd-3.
+Just completed br-2 (authentication middleware).
+Created br-3 (rate limiting endpoint).
+Ran SRE refinement on br-3.
 
-Developer thinks: "Good context loaded, I'll just do bd-3 quickly then stop.
+Developer thinks: "Good context loaded, I'll just do br-3 quickly then stop.
 User approved the epic, they trust me to execute it.
 Stopping now is inefficient."
 
-Continues directly to execute bd-3 without STOP checkpoint.
+Continues directly to execute br-3 without STOP checkpoint.
 </code>
 
 <why_it_fails>
 **Multiple failures:**
-- User can't review bd-2 implementation before bd-3 starts
+- User can't review br-2 implementation before br-3 starts
 - User can't clear context (may hit context limit mid-task)
-- User can't adjust bd-3 based on bd-2 learnings
+- User can't adjust br-3 based on br-2 learnings
 - No checkpoint = no oversight
 
 **The rationalization trap:**
@@ -485,7 +485,7 @@ Continues directly to execute bd-3 without STOP checkpoint.
 - "Quick task" becomes long task when issues arise
 
 **What actually happens:**
-- bd-3 hits unexpected issue
+- br-3 hits unexpected issue
 - Context exhausted trying to debug
 - User returns to find 2 half-finished tasks instead of 1 complete task
 </why_it_fails>
@@ -493,16 +493,16 @@ Continues directly to execute bd-3 without STOP checkpoint.
 <correction>
 **Follow the STOP checkpoint:**
 
-1. After completing bd-2 and refining bd-3:
+1. After completing br-2 and refining br-3:
 ```markdown
-## Task bd-2 Complete - Checkpoint
+## Task br-2 Complete - Checkpoint
 
 ### What Was Done
 - Implemented JWT middleware with validation
 - Added token refresh handling
 
 ### Next Task Ready
-- bd-3: Implement rate limiting
+- br-3: Implement rate limiting
 - Adds rate limiting to auth endpoints
 
 ### Epic Progress
@@ -628,8 +628,8 @@ Before closing epic:
 
 <resources>
 
-**bd command reference:**
-- See [bd commands](../common-patterns/bd-commands.md) for complete command list
+**br command reference:**
+- See [br commands](../common-patterns/br-commands.md) for complete command list
 
 **When stuck:**
 - Hit blocker → Re-read epic, check anti-patterns, research or ask

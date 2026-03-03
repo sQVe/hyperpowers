@@ -1,10 +1,10 @@
 ---
 name: analyzing-test-effectiveness
-description: Use to audit test quality with Google Fellow SRE scrutiny - identifies tautological tests, coverage gaming, weak assertions, missing corner cases. Creates bd epic with tasks for improvements, then runs SRE task refinement on each.
+description: Use to audit test quality with Google Fellow SRE scrutiny - identifies tautological tests, coverage gaming, weak assertions, missing corner cases. Creates br epic with tasks for improvements, then runs SRE task refinement on each.
 ---
 
 <skill_overview>
-Audit test suites for real effectiveness, not vanity metrics. Identify tests that provide false confidence (tautological, mock-testing, line hitters) and missing corner cases. Create bd epic with tracked tasks for improvements. Run SRE task refinement on each task before execution.
+Audit test suites for real effectiveness, not vanity metrics. Identify tests that provide false confidence (tautological, mock-testing, line hitters) and missing corner cases. Create br epic with tracked tasks for improvements. Run SRE task refinement on each task before execution.
 
 **CRITICAL MINDSET: Assume tests were written by junior engineers optimizing for coverage metrics.** Default to skeptical—a test is RED or YELLOW until proven GREEN. You MUST read production code before categorizing tests. GREEN is the exception, not the rule.
 </skill_overview>
@@ -23,7 +23,7 @@ MEDIUM FREEDOM - Follow the 5-phase analysis process exactly. Categorization cri
 | 5. Self-Review | Challenge every GREEN - would a senior SRE agree? | Validated categories |
 | 6. Corner Cases | Identify missing edge cases per module | Gap analysis |
 | 7. Prioritize | Rank by business criticality | Priority matrix |
-| 8. bd Issues | Create epic + tasks, run SRE refinement | Tracked improvement plan |
+| 8. br Issues | Create epic + tasks, run SRE refinement | Tracked improvement plan |
 
 **MANDATORY: Read production code BEFORE categorizing tests. You cannot assess a test without understanding what it claims to test.**
 
@@ -33,9 +33,9 @@ MEDIUM FREEDOM - Follow the 5-phase analysis process exactly. Categorization cri
 3. Could code break while test passes? (If yes → YELLOW or RED)
 4. Meaningful assertion on PRODUCTION output? (`!= nil` or testing fixtures → weak)
 
-**bd Integration (MANDATORY):**
-- Create bd epic for test quality improvement
-- Create bd tasks for: remove RED, strengthen YELLOW, add corner cases
+**br Integration (MANDATORY):**
+- Create br epic for test quality improvement
+- Create br tasks for: remove RED, strengthen YELLOW, add corner cases
 - Run hyperpowers:sre-task-refinement on all tasks
 - Link tasks to epic with dependencies
 
@@ -520,14 +520,14 @@ For each module, identify missing corner case tests:
 
 ---
 
-## Phase 7: Create bd Issues and Improvement Plan
+## Phase 7: Create br Issues and Improvement Plan
 
-**CRITICAL:** All findings MUST be tracked in bd and go through SRE task refinement.
+**CRITICAL:** All findings MUST be tracked in br and go through SRE task refinement.
 
-### Step 5.1: Create bd Epic for Test Quality Improvement
+### Step 5.1: Create br Epic for Test Quality Improvement
 
 ```bash
-bd create "Test Quality Improvement: [Module/Project]" \
+br create "Test Quality Improvement: [Module/Project]" \
   --type epic \
   --priority 1 \
   --design "$(cat <<'EOF'
@@ -552,12 +552,12 @@ EOF
 )"
 ```
 
-### Step 5.2: Create bd Tasks for Each Category
+### Step 5.2: Create br Tasks for Each Category
 
 **Task 1: Remove Tautological Tests (Immediate)**
 
 ```bash
-bd create "Remove tautological tests from [module]" \
+br create "Remove tautological tests from [module]" \
   --type task \
   --priority 0 \
   --design "$(cat <<'EOF'
@@ -586,7 +586,7 @@ EOF
 **Task 2: Strengthen Weak Tests (This Sprint)**
 
 ```bash
-bd create "Strengthen weak assertions in [module]" \
+br create "Strengthen weak assertions in [module]" \
   --type task \
   --priority 1 \
   --design "$(cat <<'EOF'
@@ -618,7 +618,7 @@ EOF
 **Task 3: Add Missing Corner Cases (Per Module)**
 
 ```bash
-bd create "Add missing corner case tests for [module]" \
+br create "Add missing corner case tests for [module]" \
   --type task \
   --priority 1 \
   --design "$(cat <<'EOF'
@@ -652,7 +652,7 @@ EOF
 
 ### Step 5.3: Run SRE Task Refinement
 
-**MANDATORY:** After creating bd tasks, run SRE task refinement:
+**MANDATORY:** After creating br tasks, run SRE task refinement:
 
 ```
 Announce: "I'm using hyperpowers:sre-task-refinement to review these test improvement tasks."
@@ -669,19 +669,19 @@ Apply all 8 categories to each task, especially:
 
 ```bash
 # Link all tasks as children of epic
-bd dep add bd-2 bd-1 --type parent-child
-bd dep add bd-3 bd-1 --type parent-child
-bd dep add bd-4 bd-1 --type parent-child
+br dep add br-2 br-1 --type parent-child
+br dep add br-3 br-1 --type parent-child
+br dep add br-4 br-1 --type parent-child
 
 # Set dependencies (remove before strengthen before add)
-bd dep add bd-3 bd-2  # strengthen depends on remove
-bd dep add bd-4 bd-3  # add depends on strengthen
+br dep add br-3 br-2  # strengthen depends on remove
+br dep add br-4 br-3  # add depends on strengthen
 ```
 
 ### Step 5.5: Validation Task
 
 ```bash
-bd create "Validate test improvements with mutation testing" \
+br create "Validate test improvements with mutation testing" \
   --type task \
   --priority 1 \
   --design "$(cat <<'EOF'
@@ -777,26 +777,26 @@ EOF
 
 [Repeat for each module]
 
-## bd Issues Created
+## br Issues Created
 
 ### Epic
-- **bd-N**: Test Quality Improvement: [Project Name]
+- **br-N**: Test Quality Improvement: [Project Name]
 
 ### Tasks
-| bd ID | Task | Priority | Status |
+| br ID | Task | Priority | Status |
 |-------|------|----------|--------|
-| bd-N | Remove tautological tests from [module] | P0 | Created |
-| bd-N | Strengthen weak assertions in [module] | P1 | Created |
-| bd-N | Add missing corner case tests for [module] | P1 | Created |
-| bd-N | Validate with mutation testing | P1 | Created |
+| br-N | Remove tautological tests from [module] | P0 | Created |
+| br-N | Strengthen weak assertions in [module] | P1 | Created |
+| br-N | Add missing corner case tests for [module] | P1 | Created |
+| br-N | Validate with mutation testing | P1 | Created |
 
 ### Dependency Tree
 ```
-bd-1 (Epic: Test Quality Improvement)
-├── bd-2 (Remove tautological tests)
-├── bd-3 (Strengthen weak assertions) ← depends on bd-2
-├── bd-4 (Add corner case tests) ← depends on bd-3
-└── bd-5 (Validate with mutation testing) ← depends on bd-4
+br-1 (Epic: Test Quality Improvement)
+├── br-2 (Remove tautological tests)
+├── br-3 (Strengthen weak assertions) ← depends on br-2
+├── br-4 (Add corner case tests) ← depends on br-3
+└── br-5 (Validate with mutation testing) ← depends on br-4
 ```
 
 ## SRE Task Refinement Status
@@ -808,7 +808,7 @@ bd-1 (Epic: Test Quality Improvement)
 
 ## Next Steps
 
-1. Run `bd ready` to see tasks ready for implementation
+1. Run `br ready` to see tasks ready for implementation
 2. Implement tasks using hyperpowers:executing-plans
 3. Run validation task to verify improvements
 ```
@@ -968,7 +968,7 @@ test('service accepts valid data', () => {
 6. **Mock-testing tests must be replaced** → Test production code, not mocks
 7. **Self-review before finalizing** → Challenge every GREEN classification
 8. **Mutation testing validates improvements** → Coverage alone is vanity metric
-9. **All findings tracked in bd** → Create epic + tasks for every issue found
+9. **All findings tracked in br** → Create epic + tasks for every issue found
 10. **SRE refinement on all tasks** → Run hyperpowers:sre-task-refinement before execution
 
 ## Common Analysis Failures
@@ -996,7 +996,7 @@ All of these mean: **STOP. The test is probably RED or YELLOW.**
 - "The test looks reasonable" (Junior engineers write plausible-looking garbage)
 - "The test name says it tests X" (Names lie, trace the actual code)
 - "It exercises the function" (Calling != testing; assertions matter)
-- "I'll just fix these without bd" (Untracked work = forgotten work)
+- "I'll just fix these without br" (Untracked work = forgotten work)
 - "SRE refinement is overkill for test fixes" (Test tasks need same rigor as feature tasks)
 </critical_rules>
 
@@ -1025,9 +1025,9 @@ Before completing analysis:
 - [ ] Detailed findings table for each category
 - [ ] Missing corner cases documented per module
 
-**bd Integration (MANDATORY):**
-- [ ] Created bd epic for test quality improvement
-- [ ] Created bd tasks for each category (remove, strengthen, add)
+**br Integration (MANDATORY):**
+- [ ] Created br epic for test quality improvement
+- [ ] Created br tasks for each category (remove, strengthen, add)
 - [ ] Linked tasks to epic with parent-child relationships
 - [ ] Set task dependencies (remove → strengthen → add → validate)
 - [ ] Ran hyperpowers:sre-task-refinement on ALL tasks
@@ -1052,19 +1052,19 @@ Before completing analysis:
 - Before major refactoring efforts
 
 **This skill calls (MANDATORY):**
-- hyperpowers:sre-task-refinement (for ALL bd tasks created)
+- hyperpowers:sre-task-refinement (for ALL br tasks created)
 - hyperpowers:test-runner agent (to run tests during analysis)
 - hyperpowers:test-effectiveness-analyst agent (for detailed analysis)
 
 **This skill creates:**
-- bd epic for test quality improvement
-- bd tasks for removing, strengthening, and adding tests
-- bd validation task with mutation testing
+- br epic for test quality improvement
+- br tasks for removing, strengthening, and adding tests
+- br validation task with mutation testing
 
 **Workflow chain:**
 ```
 analyzing-test-effectiveness
-    ↓ (creates bd issues)
+    ↓ (creates br issues)
 sre-task-refinement (on each task)
     ↓ (refines tasks)
 executing-plans (implements tasks)

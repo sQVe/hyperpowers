@@ -2,7 +2,7 @@
 """
 PreToolUse hook to block direct reads of .beads/issues.jsonl
 
-The bd CLI provides the correct interface for interacting with bd tasks.
+The br CLI provides the correct interface for interacting with br tasks.
 Direct file access bypasses validation and often fails due to file size.
 """
 
@@ -33,8 +33,8 @@ def main():
                     "permissionDecision": "deny",
                     "permissionDecisionReason": (
                         "Direct access to .beads/issues.jsonl is not allowed. "
-                        "Use bd CLI commands instead: bd show, bd list, bd ready, bd dep tree, etc. "
-                        "The bd CLI provides the correct interface for reading task specifications."
+                        "Use br CLI commands instead: br show, br list, br ready, br dep tree, etc. "
+                        "The br CLI provides the correct interface for reading task specifications."
                     )
                 }
             }

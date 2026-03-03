@@ -21,7 +21,7 @@ Reusable workflows for common development tasks:
 **Bug Fixing & Debugging:**
 - **debugging-with-tools** - Systematic investigation using debuggers, internet research, and agents
 - **root-cause-tracing** - Trace backward through call stack to find original trigger
-- **fixing-bugs** - Complete workflow from bug discovery to closure with bd tracking
+- **fixing-bugs** - Complete workflow from bug discovery to closure with br tracking
 
 **Refactoring & Maintenance:**
 - **refactoring-diagnosis** - Identify code/design smells and refactor targets
@@ -34,7 +34,7 @@ Reusable workflows for common development tasks:
 - **verification-before-completion** - Always verify before claiming success
 
 **Task & Project Management:**
-- **managing-bd-tasks** - Advanced bd operations: splitting tasks, merging duplicates, dependencies, metrics
+- **managing-br-tasks** - Advanced br operations: splitting tasks, merging duplicates, dependencies, metrics
 
 **Collaboration & Process:**
 - **dispatching-parallel-agents** - Investigate independent failures concurrently
@@ -50,7 +50,7 @@ Quick access to key workflows:
 
 - `/hyperpowers:brainstorm` - Start interactive design refinement
 - `/hyperpowers:write-plan` - Create detailed implementation plan
-- `/hyperpowers:sre-task-refinement` - Refine bd tasks with SRE edge-case analysis
+- `/hyperpowers:sre-task-refinement` - Refine br tasks with SRE edge-case analysis
 - `/hyperpowers:execute-plan` - Execute plan with review checkpoints
 - `/hyperpowers:review-implementation` - Review completed implementation
 - `/hyperpowers:refactor-diagnose` - Diagnose code/design smells and refactor targets
@@ -155,11 +155,11 @@ Claude: I'm using the brainstorming skill to refine your authentication requirem
 
 Claude: Now I'm using the writing-plans skill to create a detailed implementation plan.
 
-[Creates detailed plan with specific tasks in bd]
+[Creates detailed plan with specific tasks in br]
 
 Claude: I'm using the executing-plans skill to implement the tasks.
 
-[Works through ready tasks continuously, using bd ready to find next task]
+[Works through ready tasks continuously, using br ready to find next task]
 
 Claude: I'm using the test-runner agent to verify all tests pass.
 
