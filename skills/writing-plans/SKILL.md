@@ -204,8 +204,10 @@ All br issues now contain detailed implementation steps.
 Epic ready for execution.
 ```
 
-**Offer execution choice:**
-"Ready to execute? I can use hyperpowers:executing-plans to implement iteratively."
+**STOP — do not proceed to implementation.**
+
+Tell the user:
+"Plan complete. Run `/hyperpowers:execute-plan` to begin implementation."
 
 </the_process>
 

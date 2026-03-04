@@ -87,6 +87,9 @@ Before using a skill, announce it:
 **Before writing ANY code:**
 - Use hyperpowers:brainstorming to refine requirements
 - Use hyperpowers:writing-plans to create detailed plan
+- **STOP** — do NOT start executing. User must explicitly run `/hyperpowers:execute-plan`
+
+**When user explicitly requests implementation:**
 - Use hyperpowers:executing-plans to implement iteratively
 
 **When implementing:**
@@ -156,8 +159,8 @@ Claude: "I'm using hyperpowers:brainstorming to refine your requirements."
 Claude: "Now I'm using hyperpowers:writing-plans to create an implementation plan."
 [Creates br epic with tasks]
 
-Claude: "Now I'm using hyperpowers:executing-plans to implement iteratively."
-[Implements with TDD, commits incrementally]
+Claude: "Plan complete. Run `/hyperpowers:execute-plan` to begin implementation."
+[STOPS — waits for explicit user command before writing any code]
 </correction>
 </example>
 </examples>
