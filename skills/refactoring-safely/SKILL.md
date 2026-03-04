@@ -528,11 +528,6 @@ Before marking refactoring complete:
 - hyperpowers:verification-before-completion (for final verification)
 - hyperpowers:test-runner agent (for running tests without context pollution)
 
-**This skill is called by:**
-- General development workflows when improving code structure
-- After features are complete and working
-- When preparing code for new features
-
 **Agents used:**
 - test-runner (runs tests/commits without polluting main context)
 </integration>

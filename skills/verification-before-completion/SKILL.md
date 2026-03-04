@@ -335,12 +335,6 @@ Before closing br epic:
 **This skill calls:**
 - test-runner (for verbose verification commands)
 
-**This skill is called by:**
-- test-driven-development (verify tests pass/fail)
-- executing-plans (verify task success criteria)
-- refactoring-safely (verify tests still pass)
-- ALL skills before completion claims
-
 **Agents used:**
 - hyperpowers:test-runner (run tests, hooks, commits without output pollution)
 

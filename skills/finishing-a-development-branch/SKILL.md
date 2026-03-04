@@ -450,9 +450,6 @@ Before completing:
 </verification_checklist>
 
 <integration>
-**This skill is called by:**
-- hyperpowers:review-implementation (final step after approval)
-
 **Call chain:**
 ```
 hyperpowers:executing-plans → hyperpowers:review-implementation → hyperpowers:finishing-a-development-branch
@@ -469,10 +466,6 @@ hyperpowers:executing-plans → hyperpowers:review-implementation → hyperpower
 </integration>
 
 <resources>
-**Detailed guides:**
-- [Git worktree management](resources/worktree-guide.md)
-- [PR description templates](resources/pr-templates.md)
-- [br epic reference in PRs](resources/br-pr-integration.md)
 
 **When stuck:**
 - Tasks won't close → Check br status, verify all child tasks done

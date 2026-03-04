@@ -34,18 +34,7 @@ HIGH FREEDOM - The meta-process (check for skills, use Skill tool, announce usag
 </quick_reference>
 
 <when_to_use>
-This skill applies at the start of EVERY conversation and BEFORE every task:
-
-- User asks you to implement a feature
-- User asks you to fix a bug
-- User asks you to refactor code
-- User asks you to debug an issue
-- User asks you to write tests
-- User asks you to review code
-- User describes a problem to solve
-- User provides requirements to implement
-
-**Applies to:** Literally any task that might have a corresponding skill.
+Applies to every task in every conversation. If any skill might apply, use it.
 </when_to_use>
 
 <the_process>
@@ -147,133 +136,28 @@ TodoWrite todos:
 User: "Add a user profile page with avatar upload"
 
 Claude (without using-hyper):
-"Sure! Let me start implementing the user profile page..."
-[Starts writing code immediately without brainstorming or planning]
+"Sure! Let me start implementing..."
+[Writes code without brainstorming or planning]
 </code>
 
 <why_it_fails>
-- Skipped mandatory brainstorming (requirements unclear)
-- Skipped writing-plans (no detailed implementation plan)
-- Skipped test-driven-development (no tests first)
-- Will likely miss edge cases, make wrong assumptions
-- User has no visibility into approach before code is written
+- Skipped brainstorming (requirements unclear, edge cases missed)
+- Skipped writing-plans (no plan for user to review)
+- Skipped TDD (tests written after, if at all)
 </why_it_fails>
 
 <correction>
 **Correct approach:**
 
-Claude: "I'm using hyperpowers:brainstorming to refine your requirements into a complete design."
-
-[Skill tool loads brainstorming]
-[Asks Socratic questions about avatar size limits, formats, storage, etc.]
+Claude: "I'm using hyperpowers:brainstorming to refine your requirements."
+[Asks Socratic questions about avatar size limits, formats, storage]
 [Creates refined requirements]
 
-Claude: "Now I'm using hyperpowers:writing-plans to create a detailed implementation plan."
-
-[Skill tool loads writing-plans]
+Claude: "Now I'm using hyperpowers:writing-plans to create an implementation plan."
 [Creates br epic with tasks]
 
-Claude: "Now I'm using hyperpowers:executing-plans to implement the tasks iteratively."
-
-[Skill tool loads executing-plans]
+Claude: "Now I'm using hyperpowers:executing-plans to implement iteratively."
 [Implements with TDD, commits incrementally]
-
-**What you gain:**
-- Clear requirements before coding
-- Detailed plan user can review
-- Implementation follows proven workflow
-- Tests written first (TDD)
-- Progress tracked in br
-</correction>
-</example>
-
-<example>
-<scenario>User reports a bug</scenario>
-
-<code>
-User: "Users can't log in after password reset"
-
-Claude (without using-hyper):
-"Let me check the password reset code... I found the issue, it's not updating the password hash. Let me fix that..."
-[Makes immediate fix without investigation]
-</code>
-
-<why_it_fails>
-- Skipped debugging-with-tools (no systematic investigation)
-- Skipped fixing-bugs workflow (no br issue, no regression test)
-- "Obvious" fix might be wrong or incomplete
-- No verification that fix actually works
-- Will likely miss root cause and fix symptom
-</why_it_fails>
-
-<correction>
-**Correct approach:**
-
-Claude: "I'm using hyperpowers:debugging-with-tools to investigate this systematically."
-
-[Skill tool loads debugging-with-tools]
-[Uses debugger, checks logs, searches internet for known issues]
-[Identifies root cause: token invalidation timing issue]
-
-Claude: "Now I'm using hyperpowers:fixing-bugs to implement a complete fix."
-
-[Skill tool loads fixing-bugs]
-[Creates br bug issue]
-[Writes failing test reproducing bug (RED)]
-[Implements minimal fix (GREEN)]
-[Runs full test suite via test-runner agent]
-[Verifies fix and closes br issue]
-
-**What you gain:**
-- Root cause identified (not symptom)
-- Regression test prevents recurrence
-- Fix verified with evidence
-- Bug tracked in br
-- Complete workflow documented
-</correction>
-</example>
-
-<example>
-<scenario>User asks to refactor code</scenario>
-
-<code>
-User: "This validation logic is duplicated, can you extract it?"
-
-Claude (without using-hyper):
-"Sure, let me extract that into a shared function..."
-[Changes 5 files at once, then runs tests]
-[Tests fail]
-"Hmm, let me fix these test failures..."
-</code>
-
-<why_it_fails>
-- Skipped refactoring-safely workflow (change→test→commit cycle)
-- Big-bang refactoring (changed multiple files before testing)
-- Tests failing means behavior changed (not safe refactoring)
-- Can't identify which change broke what
-- Wastes time debugging entire refactoring
-</why_it_fails>
-
-<correction>
-**Correct approach:**
-
-Claude: "I'm using hyperpowers:refactoring-safely to extract this validation logic incrementally."
-
-[Skill tool loads refactoring-safely]
-
-Step 1: Verify tests pass BEFORE refactoring
-Step 2: Create br refactoring task
-Step 3: Extract validation from first file → test → commit
-Step 4: Extract validation from second file → test → commit
-Step 5: Create shared validator → test → commit
-Step 6: Final verification → close br task
-
-**What you gain:**
-- Tests stay green throughout (safe refactoring)
-- Each commit is reviewable independently
-- Know exactly which change broke if test fails
-- Can stop halfway with useful progress
-- Clear history of transformations
 </correction>
 </example>
 </examples>
@@ -322,51 +206,11 @@ These have HIGH FREEDOM - adapt core principles to context:
 **The skill itself tells you its rigidity level.** Check `<rigidity_level>` section.
 </understanding_rigidity>
 
-<instructions_vs_workflows>
-## User Instructions Describe WHAT, Not HOW
 
-**User says:** "Add user authentication"
-**This means:** Use brainstorming → writing-plans → executing-plans → TDD → verification
-
-**User says:** "Fix this bug"
-**This means:** Use debugging-with-tools → fixing-bugs → TDD → verification
-
-**User says:** "Refactor this code"
-**This means:** Use refactoring-safely (change→test→commit cycle)
-
-**User instructions are the GOAL, not permission to skip workflows.**
-
-**Red flags that you're rationalizing:**
-- "Instruction was specific, don't need brainstorming"
-- "Seems simple, don't need TDD"
-- "Workflow is overkill for this"
-
-**Why workflows matter MORE when instructions are specific:**
-- Clear requirements = perfect time for structured implementation
-- "Simple" tasks often have hidden complexity
-- Skipping process on "easy" tasks is how they become hard problems
-</instructions_vs_workflows>
-
-<verification_checklist>
-Before completing ANY task:
-
-- [ ] Did I check for relevant skills before starting?
-- [ ] Did I use Skill tool to load skills (not rely on memory)?
-- [ ] Did I announce which skill I'm using?
-- [ ] Did I follow the skill's process exactly?
-- [ ] Did I create TodoWrite for any skill checklists?
-- [ ] Did I follow mandatory workflows (brainstorming, TDD, verification)?
-
-**Can't check all boxes?** You skipped critical steps. Review and fix.
-</verification_checklist>
 
 <integration>
 **This skill calls:**
 - ALL other skills (meta-skill that triggers appropriate skill usage)
-
-**This skill is called by:**
-- Session start (always loaded)
-- User requests (check before every task)
 
 **Critical workflows this establishes:**
 - hyperpowers:brainstorming (before writing code)

@@ -466,11 +466,6 @@ Before committing fix:
 - test-driven-development (write test for bug, implement fix)
 - test-runner (run tests without output pollution)
 
-**This skill is called by:**
-- fixing-bugs (complete bug fix workflow)
-- root-cause-tracing (deep debugging for complex issues)
-- Any skill when encountering unexpected behavior
-
 **Agents used:**
 - hyperpowers:internet-researcher (search for error solutions)
 - hyperpowers:codebase-investigator (understand codebase context)

@@ -576,11 +576,6 @@ Before deploying ANY skill:
 - hyperpowers:test-driven-development (understand TDD before applying to docs)
 - Task tool (for running subagent tests)
 
-**This skill is called by:**
-- Anyone creating or editing skills
-- Plugin maintainers
-- Users with personal skill repositories
-
 **Agents used:**
 - general-purpose (for testing skills under pressure)
 </integration>

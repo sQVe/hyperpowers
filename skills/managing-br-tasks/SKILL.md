@@ -697,7 +697,6 @@ After advanced br operations:
 **Detailed guides:**
 - [Metrics guide (cycle time, WIP limits)](resources/metrics-guide.md)
 - [Task naming conventions](resources/task-naming-guide.md)
-- [Dependency patterns](resources/dependency-patterns.md)
 
 **When stuck:**
 - Task seems unsplittable → Ask user how to break it down

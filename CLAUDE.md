@@ -10,40 +10,7 @@ Inspired by [obra/superpowers](https://github.com/obra/superpowers).
 
 ## CRITICAL: Understanding User Requests in This Repository
 
-**This is a plugin development project.** Your task is to improve the plugin (skills, hooks, agents, commands), NOT to debug the user's other projects.
-
-### Common Pattern: Examples from Other Sessions
-
-The user will frequently describe issues like:
-- "Claude did X in another session and it was wrong"
-- "I got this error: [some error from another project]"
-- "Claude truncated the br task and that caused problems"
-- "Claude edited .git/hooks/pre-commit with sed"
-
-**CRITICAL - These are NOT problems for you to investigate or debug.**
-
-### What These Examples Actually Mean
-
-When the user describes an issue from another session, they are:
-1. **Providing evidence** of a pattern where Claude behaves incorrectly
-2. **Requesting plugin improvements** to prevent that pattern
-3. **NOT asking you** to fix those specific historical errors
-
-### The Correct Response Pattern
-
-**Bad response (trying to fix the other session):**
-```
-Let me investigate that error. Can you show me the file where the truncation occurred?
-Let me check the br task that was created. What was the full command?
-```
-
-**Good response (improving the plugin):**
-```
-This is a pattern we can prevent with a hook. Let me create a PostToolUse hook
-that blocks br commands containing truncation markers.
-```
-
-### Translation Guide
+User reports from other sessions are requests to **improve the plugin**, not to debug that session. Improve skills, hooks, agents, commands to prevent the pattern from recurring. Never try to investigate past sessions — you cannot access them.
 
 | What user says | What they actually want |
 |----------------|------------------------|
@@ -52,36 +19,6 @@ that blocks br commands containing truncation markers.
 | "The test-runner agent didn't activate" | Improve skill-rules.json triggers |
 | "Claude ignored the skill" | Improve skill description or add hook |
 | "This caused incomplete implementation" | Add blocking hook to prevent pattern |
-
-### Your Goal in This Repository
-
-**Always:** Improve the plugin to prevent bad patterns
-**Never:** Try to investigate or fix issues from other sessions
-
-You cannot access other sessions. You cannot fix past problems. You CAN prevent those problems from happening again by improving skills, hooks, agents, and commands in THIS repository.
-
-### Examples of Correct Responses
-
-**User:** "Claude edited .git/hooks/pre-commit with `sed -i` to work around an error"
-
-**Correct response:**
-- Create PreToolUse hook blocking Edit/Write to pre-commit
-- Create PostToolUse hook blocking Bash commands modifying pre-commit
-- Update HOOKS.md with documentation
-
-**User:** "The br task had '[Remaining steps truncated]' which caused incomplete implementation"
-
-**Correct response:**
-- Create PostToolUse hook blocking br create/update with truncation markers
-- Add regex patterns for all truncation variations
-- Test hook with sample commands
-
-**User:** "Claude ran `./scripts/docker-test.sh` with 700+ lines of output and didn't suggest test-runner agent"
-
-**Correct response:**
-- Add test script patterns to skill-rules.json
-- Add keywords like "npm test", "pytest", test runner names
-- Test activation with sample prompts
 
 ## Plugin Structure
 
@@ -153,67 +90,15 @@ Specialized agents run in separate contexts to handle specific tasks:
 
 ### Common Patterns Location
 
-To avoid duplication, common elements are centralized in `skills/common-patterns/`:
-
-- `br-commands.md` - Standard br command examples
-- `common-anti-patterns.md` - Anti-patterns to avoid
-- `common-rationalizations.md` - Excuses that signal failure
-
-Skills reference these rather than duplicating content.
+`skills/common-patterns/br-commands.md` — standard br command examples, referenced by executing-plans, writing-plans, managing-br-tasks.
 
 ## Core Workflows
 
-### Feature Development (Greenfield)
-
-Complete workflow from idea to PR:
-
-1. **Brainstorming** (`/hyperpowers:brainstorm`) - Socratic questioning to refine requirements
-2. **SRE Task Refinement** (optional, `/hyperpowers:sre-task-refinement`) - Uses Opus 4.1 to identify corner cases
-3. **Writing Plans** (`/hyperpowers:write-plan`) - Creates detailed br epic with tasks
-4. **Executing Plans** (`/hyperpowers:execute-plan`) - Implements tasks continuously, updating br
-5. **Review Implementation** (`/hyperpowers:review-implementation`) - Verifies against spec
-6. **Finishing Branch** - Creates PR, handles cleanup
-
-### Test-Driven Development
-
-Required for most implementation work:
-
-1. Write test first (RED phase)
-2. Watch test fail (verifies test actually tests something)
-3. Write minimal code to pass (GREEN phase)
-4. Refactor while keeping tests green
-5. Commit
-
-The `test-driven-development` skill enforces this rigorously.
-
-### Bug Fixing & Debugging
-
-Complete workflow for fixing bugs systematically:
-
-1. **Create br Bug Issue** - Track the bug with reproduction steps
-2. **Debugging with Tools** - Use debuggers, internet-researcher, codebase-investigator to find root cause
-3. **Write Failing Test** (RED phase) - Reproduce the bug in a test
-4. **Implement Fix** (GREEN phase) - Minimal fix addressing root cause
-5. **Verify** - Run full test suite via test-runner agent, check for regressions
-6. **Close br Issue** - Document fix and close
-
-**Key Skills:**
-- `debugging-with-tools` - Systematic investigation using debuggers, internet research, and agents
-- `root-cause-tracing` - Trace backward through call stack to find original trigger
-- `fixing-bugs` - Complete workflow from bug discovery to closure
-
-**Critical:** Always use debugger and internet-researcher BEFORE attempting fixes. Never fix symptoms.
-
-### Verification Pattern
-
-Before claiming any work is complete:
-
-1. Run verification commands (tests, lints, builds)
-2. Capture output as evidence
-3. Only claim success if verification passes
-4. Use test-runner agent to avoid context pollution
-
-The `verification-before-completion` skill makes this mandatory.
+- Feature: brainstorming → writing-plans → executing-plans → review-implementation → finishing-branch
+- Bug fix: debugging-with-tools → fixing-bugs → verification-before-completion
+- Refactor: refactoring-safely (change→test→commit cycle)
+- TDD: test-driven-development (RED-GREEN-REFACTOR, mandatory)
+- Verify: verification-before-completion (mandatory before claiming done)
 
 ## Development Commands
 
@@ -237,57 +122,6 @@ claude plugin install hyperpowers@withzombies-hyper
 ```
 
 Version is tracked in `.claude-plugin/plugin.json`.
-
-## Philosophy and Principles
-
-From the using-hyper skill and README:
-
-1. **Incremental progress over big bangs** - Small changes that compile and pass tests
-2. **Learning from existing code** - Study patterns before implementing
-3. **Explicit workflows over implicit assumptions** - Make the process visible
-4. **Verification before completion** - Evidence over assertions
-5. **Test-driven when possible** - Red, green, refactor
-
-### Mandatory Workflows
-
-The `using-hyper` skill establishes these non-negotiable rules:
-
-- **Check for relevant skills before ANY task** - If a skill exists for it, use it
-- **Use Skill tool before announcing** - Load the actual skill file, don't rely on memory
-- **Create TodoWrite todos for checklists** - Track progress explicitly
-- **Follow brainstorming before coding** - Design first, code second
-- **Use verification-before-completion** - Never claim success without evidence
-
-## Common Pitfalls
-
-From `using-hyper` - watch for these rationalizations:
-
-- "This is just a simple question" → Wrong. Check for skills.
-- "I can check git/files quickly" → Wrong. Files lack context. Check for skills.
-- "Let me gather information first" → Wrong. Skills tell you HOW to gather.
-- "This doesn't need a formal skill" → Wrong. If skill exists, use it.
-- "I remember this skill" → Wrong. Skills evolve. Run current version.
-- "The skill is overkill" → Wrong. Skills exist because simple things become complex.
-
-## Current Limitations
-
-From RECOMMENDATIONS.md:
-
-**Currently covered:**
-- ✅ Greenfield feature development (idea → design → implementation → PR)
-- ✅ Bug fixing and debugging workflows (systematic investigation, root cause tracing)
-- ✅ Refactoring workflows (test-preserving transformations)
-- ✅ Advanced task management (splitting, merging, dependencies, metrics)
-- ✅ Quality culture (TDD, verification, SRE review)
-- ✅ Clean br integration
-
-**Missing (see RECOMMENDATIONS.md for details):**
-- ❌ Incident response
-- ❌ Code review response (receiving reviews)
-- ❌ Merge conflict resolution
-- ❌ Documentation workflows
-
-Priority: Continue adding collaboration workflows (code review response, incidents).
 
 ## File Naming Conventions
 

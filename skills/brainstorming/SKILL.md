@@ -559,7 +559,7 @@ br create "Epic: OAuth Authentication" --design "
 </why_it_fails>
 
 <correction>
-**Correct approach with anti-patterns and design rationale:**
+**The fix: add Anti-Patterns and Approach sections to the epic:**
 
 ```bash
 br create "Epic: OAuth Authentication" --design "
@@ -567,210 +567,23 @@ br create "Epic: OAuth Authentication" --design "
 - Users authenticate via Google OAuth2
 - Tokens stored in httpOnly cookies (NOT localStorage)
 - Session expires after 24h inactivity
-- Integrates with existing User model at db/models/user.ts
 
 ## Success Criteria
-- [ ] Login redirects to Google and back
-- [ ] Tokens in httpOnly cookies
-- [ ] Token refresh works automatically
 - [ ] Integration tests pass WITHOUT mocking OAuth
-- [ ] All tests passing
+- [ ] Tokens in httpOnly cookies
 
 ## Anti-Patterns (FORBIDDEN)
-- ❌ NO localStorage tokens (security: httpOnly prevents XSS token theft)
-- ❌ NO new user model (consistency: must use existing db/models/user.ts)
-- ❌ NO mocking OAuth in integration tests (validation: defeats purpose of testing real flow)
-- ❌ NO skipping token refresh (completeness: explicit requirement from user)
+- ❌ NO localStorage tokens (httpOnly prevents XSS token theft)
+- ❌ NO mocking OAuth in integration tests (defeats validation)
+- ❌ NO new user model (use existing db/models/user.ts)
 
 ## Approach
-Extend existing passport.js setup at auth/passport-config.ts with Google OAuth2 strategy.
-Use passport-google-oauth20 library. Store tokens in httpOnly cookies via express-session.
-Integrate with existing User model for profile storage.
-
-## Architecture
-- auth/strategies/google.ts - New OAuth strategy
-- auth/passport-config.ts - Register strategy (existing)
-- db/models/user.ts - Add googleId field (existing)
-- routes/auth.ts - OAuth callback routes
-
-## Design Rationale
-### Problem
-Users currently have no SSO option - must create accounts manually.
-Manual signup has 40% abandonment rate. Google OAuth reduces friction.
-
-### Research Findings
-**Codebase:**
-- auth/passport-config.ts:1-50 - Existing passport setup, uses session-based auth
-- auth/strategies/local.ts:1-30 - Pattern for adding strategies
-- db/models/user.ts:1-80 - User model, already has email field
-
-**External:**
-- passport-google-oauth20 - Official Google strategy, 2M weekly downloads
-- Google OAuth2 docs - Requires client ID, callback URL, scopes
-
-### Approaches Considered
-
-#### 1. Extend passport.js with google-oauth20 ✓
-
-**What it is:** Add passport-google-oauth20 strategy to existing passport.js setup. Reuses session-based auth, follows existing pattern in auth/strategies/.
-
-**Investigation:**
-- Reviewed auth/passport-config.ts - existing passport setup with session serialization
-- Checked auth/strategies/local.ts:1-30 - pattern for adding strategies
-- passport-google-oauth20 npm - 2M weekly downloads, actively maintained
-
-**Pros:**
-- Matches existing codebase pattern (auth/strategies/)
-- Session handling already works (express-session configured)
-- Well-documented, large community
-
-**Cons:**
-- Adds npm dependency
-
-**Chosen because:** Consistent with auth/strategies/local.ts pattern, minimal changes to existing code
-
-#### 2. Custom JWT-based OAuth ❌
-
-**What it is:** Implement OAuth flow from scratch using JWTs instead of sessions. Would replace existing session-based auth with stateless tokens.
-
-**Why we looked at this:** User mentioned 'maybe we should use JWTs' - seemed potentially simpler
-
-**Investigation:**
-- Counted files using req.session - 15 files would need rewriting
-- Reviewed existing session middleware - deeply integrated
-- Researched JWT security best practices - significant complexity
-
-**Pros:**
-- No new dependencies
-- Stateless (scalability benefit)
-
-**Cons:**
-- Would require rewriting 15 files using req.session
-- Security complexity (token invalidation, refresh logic)
-- Breaks existing session pattern
-
-**⚠️ REJECTED BECAUSE:** Scope creep - OAuth feature shouldn't require rewriting existing auth system. 15 files affected is too much risk.
-
-**🚫 DO NOT REVISIT UNLESS:** We're already rewriting the entire auth system in a separate epic.
-
-#### 3. Auth0 integration ❌
-
-**What it is:** Use Auth0 managed service for OAuth. Would handle tokens, sessions, and multiple providers.
-
-**Why we looked at this:** Third-party service might reduce implementation complexity
-
-**Investigation:**
-- Evaluated Auth0 free tier - 7000 MAU limit
-- Reviewed Auth0 SDK - different auth model than current codebase
-- Estimated migration effort - significant test rewriting
-
-**Pros:**
-- Managed service (less code to maintain)
-- Supports multiple providers out of box
-
-**Cons:**
-- External dependency, cost at scale
-- Different auth model than existing code
-- Test suite would need significant changes
-
-**⚠️ REJECTED BECAUSE:** Overkill for single OAuth provider. Introduces new pattern inconsistent with codebase.
-
-**🚫 DO NOT REVISIT UNLESS:** We need 3+ OAuth providers AND are okay with vendor dependency.
-
-### Scope Boundaries
-**In scope:**
-- Google OAuth login/signup
-- Token storage in httpOnly cookies
-- Profile sync with User model
-
-**Out of scope (deferred/never):**
-- Other OAuth providers (GitHub, Facebook) - deferred to future epic
-- Account linking (connect Google to existing account) - deferred
-- Custom OAuth scopes beyond profile/email - not needed
-
-### Open Questions
-- Should failed OAuth create partial user record? (decide during implementation)
-- Token refresh: silent vs prompt? (default to silent, user can configure)
-
-## Design Discovery (Reference Context)
-
-> Detailed context from brainstorming for task creation and obstacle handling.
-
-### Key Decisions Made
-
-| Question | User Answer | Implication |
-|----------|-------------|-------------|
-| Token storage preference? | httpOnly cookies for security | Anti-pattern: NO localStorage |
-| New user model or extend existing? | Use existing at db/models/user.ts | Must add googleId field, not new table |
-| Session duration? | 24h inactive timeout | Need refresh token logic |
-| What if Google OAuth is down? | Graceful error message | No fallback auth required |
-
-### Research Deep-Dives
-
-#### OAuth Library Selection
-**Question explored:** Which OAuth library to use?
-**Sources consulted:**
-- passport-google-oauth20 npm - 2M weekly downloads, well-maintained
-- google-auth-library npm - official but lower-level
-- Stack Overflow threads on passport vs alternatives
-
-**Findings:**
-- passport-google-oauth20 matches existing passport setup at auth/passport-config.ts
-- google-auth-library would require rewriting session handling
-- Passport has built-in session serialization
-
-**Conclusion:** Use passport-google-oauth20 for consistency with existing auth/strategies/ pattern
-
-#### Token Storage Strategy
-**Question explored:** Where to store OAuth tokens?
-**Sources consulted:**
-- OWASP token storage guidelines
-- Auth0 best practices article
-- Existing codebase pattern at auth/session.ts
-
-**Findings:**
-- localStorage vulnerable to XSS (OWASP warns against)
-- httpOnly cookies prevent JS access
-- Existing session uses express-session with cookies
-
-**Conclusion:** httpOnly cookies, documented as anti-pattern to use localStorage
-
-### Dead-End Paths
-
-#### Custom JWT Implementation
-**Why explored:** User mentioned 'maybe we should use JWTs'
-**Investigation:**
-- Counted 15 files using req.session pattern
-- Estimated 2 weeks migration effort
-- Identified security complexity with token refresh
-
-**Why abandoned:** Scope creep - OAuth feature shouldn't rewrite auth system
-
-#### Auth0 Integration
-**Why explored:** Third-party service might be simpler
-**Investigation:**
-- Evaluated Auth0 free tier limits
-- Reviewed SDK integration requirements
-- Estimated test rewriting effort
-
-**Why abandoned:** Overkill for single provider, introduces vendor dependency
-
-### Open Concerns Raised
-
-- 'What if Google OAuth is down?' → Graceful degradation to error message, no fallback auth
-- 'Should we support account linking later?' → Deferred to future epic, out of scope for now
-- 'Token refresh - silent or prompt?' → Default silent, can configure later
+Extend existing passport.js at auth/passport-config.ts with Google OAuth2.
+Follow pattern in auth/strategies/local.ts.
 "
 ```
 
-**What you gain:**
-- Requirements concrete and specific (testable)
-- Forbidden patterns explicit with reasoning (prevents shortcuts)
-- Agent can't rationalize away requirements (contract enforced)
-- Design rationale preserves context for future tasks
-- Approaches considered show why alternatives were rejected with DO NOT REVISIT conditions
-- Design Discovery preserves full Q&A, research, and dead-ends for obstacle handling
-- Open questions explicitly tracked for implementation decisions
+See `resources/epic-template-example.md` for a complete epic with full Architecture, Design Rationale, Approaches Considered, and Design Discovery sections.
 </correction>
 </example>
 </examples>
@@ -865,11 +678,6 @@ Before handing off to executing-plans:
 brainstorming → sre-task-refinement → executing-plans
 ```
 
-**This skill is called by:**
-- hyperpowers:using-hyper (mandatory before writing code)
-- User requests for new features
-- Beginning of greenfield development
-
 **Agents used:**
 - codebase-investigator (understand existing code)
 - internet-researcher (find external documentation)
@@ -880,9 +688,6 @@ brainstorming → sre-task-refinement → executing-plans
 
 <resources>
 **Detailed guides:**
-- [br epic template examples](resources/epic-templates.md)
-- [Socratic questioning patterns](resources/questioning-patterns.md)
-- [Anti-pattern examples by domain](resources/anti-patterns.md)
 
 **When stuck:**
 - User gives vague answer → Ask follow-up multiple choice question

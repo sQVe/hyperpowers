@@ -312,11 +312,6 @@ Before marking work complete:
 **This skill calls:**
 - verification-before-completion (running tests to verify)
 
-**This skill is called by:**
-- fixing-bugs (write failing test reproducing bug)
-- executing-plans (when implementing br tasks)
-- refactoring-safely (keep tests green while refactoring)
-
 **Agents used:**
 - hyperpowers:test-runner (run tests, return summary only)
 

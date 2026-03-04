@@ -553,12 +553,6 @@ Before claiming tests are correct:
 - hyperpowers:test-driven-development (prevents these anti-patterns)
 - Understanding of mocking vs. faking vs. stubbing
 
-**This skill is called by:**
-- When writing tests
-- When adding mocks
-- When test setup becoming complex
-- hyperpowers:test-driven-development (use gate functions during RED phase)
-
 **Red flags triggering this skill:**
 - Assertion checks for `*-mock` test IDs
 - Methods only called in test files
@@ -568,10 +562,6 @@ Before claiming tests are correct:
 </integration>
 
 <resources>
-**Detailed guides:**
-- [Mocking vs Faking vs Stubbing](resources/test-doubles.md)
-- [Test utilities patterns](resources/test-utilities.md)
-- [When to use integration tests](resources/integration-vs-unit.md)
 
 **When stuck:**
 - Mock too complex → Consider integration test with real components

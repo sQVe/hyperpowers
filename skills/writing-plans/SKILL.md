@@ -455,10 +455,6 @@ Before finishing all tasks:
 - test-driven-development (REQUIRED when expanding feature/fix tasks)
 - executing-plans (offered after all tasks expanded)
 
-**This skill is called by:**
-- User (via /hyperpowers:write-plan command)
-- After brainstorming creates epic
-
 **Agents used:**
 - hyperpowers:codebase-investigator (verify assumptions, report discrepancies)
 
@@ -468,7 +464,6 @@ Before finishing all tasks:
 
 **Detailed guidance:**
 - [br command reference](../common-patterns/br-commands.md)
-- [Task structure examples](resources/task-examples.md) (if exists)
 
 **When stuck:**
 - Unsure about file structure → Use codebase-investigator

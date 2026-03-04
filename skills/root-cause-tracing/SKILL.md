@@ -537,11 +537,6 @@ Before claiming root cause fixed:
 </verification_checklist>
 
 <integration>
-**This skill is called by:**
-- hyperpowers:debugging-with-tools (Phase 2: Trace Backward Through Call Stack)
-- When errors occur deep in execution
-- When unclear where invalid data originated
-
 **This skill requires:**
 - Stack traces or debugger access
 - Ability to add instrumentation (logging)
@@ -553,10 +548,6 @@ Before claiming root cause fixed:
 </integration>
 
 <resources>
-**Detailed guides:**
-- [Debugger commands by language](resources/debugger-reference.md)
-- [Instrumentation patterns](resources/instrumentation-patterns.md)
-- [Defense-in-depth examples](resources/defense-patterns.md)
 
 **When stuck:**
 - Can't find source → Add instrumentation at each layer, run test

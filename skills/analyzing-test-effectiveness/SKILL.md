@@ -141,18 +141,6 @@ test('add returns sum', () => {
 });
 ```
 
-**Detection patterns:**
-```bash
-# Find != nil / != null on non-optional types
-rg "expect\(.*\)\.not\.toBeNull|assertNotNull|!= nil" tests/
-
-# Find enum existence checks
-rg "Object\.values.*length|cases\.count" tests/
-
-# Find tests with no meaningful assertions
-rg -l "expect\(" tests/ | xargs -I {} sh -c 'grep -c "expect" {} | grep -q "^1$" && echo {}'
-```
-
 **2.2 Mock-Testing Tests** (test the mock, not production)
 
 ```typescript
@@ -172,15 +160,6 @@ test('processor handles data', () => {
 });
 ```
 
-**Detection patterns:**
-```bash
-# Find tests that only verify mock calls
-rg "toHaveBeenCalled|verify\(mock|\.called" tests/
-
-# Find heavy mock setup
-rg -c "mock|Mock|jest\.fn|stub" tests/ | sort -t: -k2 -nr | head -20
-```
-
 **2.3 Line Hitters** (execute without asserting)
 
 ```typescript
@@ -195,17 +174,6 @@ test('config loads', () => {
   const config = loadConfig();
   expect(config).toBeDefined(); // Too weak - doesn't verify correct values
 });
-```
-
-**Detection patterns:**
-```bash
-# Find tests with 0-1 assertions
-rg -l "test\(|it\(" tests/ | while read f; do
-  assertions=$(rg -c "expect|assert" "$f" 2>/dev/null || echo 0)
-  tests=$(rg -c "test\(|it\(" "$f" 2>/dev/null || echo 1)
-  ratio=$((assertions / tests))
-  [ "$ratio" -lt 2 ] && echo "$f: low assertion ratio ($assertions assertions, $tests tests)"
-done
 ```
 
 **2.4 Evergreen/Liar Tests** (always pass)
@@ -524,197 +492,17 @@ For each module, identify missing corner case tests:
 
 **CRITICAL:** All findings MUST be tracked in br and go through SRE task refinement.
 
-### Step 5.1: Create br Epic for Test Quality Improvement
+Create a br epic for test quality improvement, then one task per finding category. Each task must include: Goal, Tests to address (file:line), Success Criteria, Anti-patterns. Use `common-patterns/br-commands.md` for br command reference.
 
-```bash
-br create "Test Quality Improvement: [Module/Project]" \
-  --type epic \
-  --priority 1 \
-  --design "$(cat <<'EOF'
-## Goal
-Improve test effectiveness by removing tautological tests, strengthening weak tests, and adding missing corner case coverage.
+Tasks to create (in dependency order):
+1. **P0** "Remove tautological tests from [module]" — list each RED test with file:line
+2. **P1** "Strengthen weak assertions in [module]" — list YELLOW tests with current vs recommended assertion
+3. **P1** "Add missing corner case tests for [module]" — list each corner case with bug it prevents
+4. **P1** "Validate test improvements with mutation testing" — mutation score ≥80% for P0 modules
 
-## Success Criteria
-- [ ] All RED tests removed or replaced with meaningful tests
-- [ ] All YELLOW tests strengthened with proper assertions
-- [ ] All P0 missing corner cases covered
-- [ ] Mutation score ≥80% for P0 modules
+Link as children of the epic; set dependencies (remove → strengthen → add → validate).
 
-## Scope
-[Summary of modules analyzed and findings]
-
-## Anti-patterns
-- ❌ Adding tests that only check `!= nil`
-- ❌ Adding tests that verify mock behavior
-- ❌ Adding happy-path-only tests
-- ❌ Leaving tautological tests "for coverage"
-EOF
-)"
-```
-
-### Step 5.2: Create br Tasks for Each Category
-
-**Task 1: Remove Tautological Tests (Immediate)**
-
-```bash
-br create "Remove tautological tests from [module]" \
-  --type task \
-  --priority 0 \
-  --design "$(cat <<'EOF'
-## Goal
-Remove tests that provide false confidence by passing regardless of code correctness.
-
-## Tests to Remove
-[List each RED test with file:line]
-- tests/auth.test.ts:45 - testUserExists (tautological: verifies non-optional != nil)
-- tests/auth.test.ts:67 - testEnumHasCases (tautological: compiler checks this)
-
-## Success Criteria
-- [ ] All listed tests deleted
-- [ ] No new tautological tests introduced
-- [ ] Test suite still passes
-- [ ] Coverage may decrease (this is expected and good)
-
-## Anti-patterns
-- ❌ Keeping tests "just in case"
-- ❌ Replacing with equally meaningless tests
-- ❌ Adding coverage-only tests to compensate
-EOF
-)"
-```
-
-**Task 2: Strengthen Weak Tests (This Sprint)**
-
-```bash
-br create "Strengthen weak assertions in [module]" \
-  --type task \
-  --priority 1 \
-  --design "$(cat <<'EOF'
-## Goal
-Replace weak assertions with meaningful ones that catch real bugs.
-
-## Tests to Strengthen
-[List each YELLOW test with current vs recommended assertion]
-- tests/parser.test.ts:34 - testParse
-  - Current: `expect(result).not.toBeNull()`
-  - Strengthen: `expect(result).toEqual(expectedAST)`
-
-- tests/validator.test.ts:56 - testValidate
-  - Current: `expect(isValid).toBe(true)` (happy path only)
-  - Add edge cases: empty input, unicode, max length
-
-## Success Criteria
-- [ ] All weak assertions replaced with exact value checks
-- [ ] Edge cases added to happy-path-only tests
-- [ ] Each test documents what bug it catches
-
-## Anti-patterns
-- ❌ Replacing `!= nil` with `!= undefined` (still weak)
-- ❌ Adding edge cases without meaningful assertions
-EOF
-)"
-```
-
-**Task 3: Add Missing Corner Cases (Per Module)**
-
-```bash
-br create "Add missing corner case tests for [module]" \
-  --type task \
-  --priority 1 \
-  --design "$(cat <<'EOF'
-## Goal
-Add tests for corner cases that could cause production bugs.
-
-## Corner Cases to Add
-[List each with the bug it prevents]
-- test_empty_password_rejected - prevents auth bypass
-- test_unicode_username_preserved - prevents encoding corruption
-- test_concurrent_login_safe - prevents session corruption
-
-## Implementation Checklist
-- [ ] Write failing test first (RED)
-- [ ] Verify test fails for the right reason
-- [ ] Test catches the specific bug listed
-- [ ] Test has meaningful assertion (not just `!= nil`)
-
-## Success Criteria
-- [ ] All corner case tests written and passing
-- [ ] Each test documents the bug it catches in test name/comment
-- [ ] No tautological tests added
-
-## Anti-patterns
-- ❌ Writing test that passes immediately (didn't test anything)
-- ❌ Testing mock behavior instead of production code
-- ❌ Happy path only (defeats the purpose)
-EOF
-)"
-```
-
-### Step 5.3: Run SRE Task Refinement
-
-**MANDATORY:** After creating br tasks, run SRE task refinement:
-
-```
-Announce: "I'm using hyperpowers:sre-task-refinement to review these test improvement tasks."
-
-Use Skill tool: hyperpowers:sre-task-refinement
-```
-
-Apply all 8 categories to each task, especially:
-- **Category 8 (Test Meaningfulness)**: Verify the proposed tests actually catch bugs
-- **Category 6 (Edge Cases)**: Ensure corner cases are comprehensive
-- **Category 3 (Success Criteria)**: Ensure criteria are measurable
-
-### Step 5.4: Link Tasks to Epic
-
-```bash
-# Link all tasks as children of epic
-br dep add br-2 br-1 --type parent-child
-br dep add br-3 br-1 --type parent-child
-br dep add br-4 br-1 --type parent-child
-
-# Set dependencies (remove before strengthen before add)
-br dep add br-3 br-2  # strengthen depends on remove
-br dep add br-4 br-3  # add depends on strengthen
-```
-
-### Step 5.5: Validation Task
-
-```bash
-br create "Validate test improvements with mutation testing" \
-  --type task \
-  --priority 1 \
-  --design "$(cat <<'EOF'
-## Goal
-Verify test improvements actually catch more bugs using mutation testing.
-
-## Validation Commands
-```bash
-# Java
-mvn org.pitest:pitest-maven:mutationCoverage
-
-# JavaScript/TypeScript
-npx stryker run
-
-# Python
-mutmut run
-
-# .NET
-dotnet stryker
-```
-
-## Success Criteria
-- [ ] P0 modules: ≥80% mutation score
-- [ ] P1 modules: ≥70% mutation score
-- [ ] No surviving mutants in critical paths (auth, payments)
-
-## If Score Below Target
-- Identify surviving mutants
-- Create additional tasks to add tests that kill them
-- Re-run validation
-EOF
-)"
-```
+**MANDATORY after creating tasks:** Run `hyperpowers:sre-task-refinement` on each task. Apply Category 8 (Test Meaningfulness) especially — verify proposed tests actually catch bugs.
 
 ---
 
@@ -724,7 +512,6 @@ EOF
 # Test Effectiveness Analysis: [Project Name]
 
 ## Executive Summary
-
 | Metric | Count | % |
 |--------|-------|---|
 | Total tests analyzed | N | 100% |
@@ -736,81 +523,15 @@ EOF
 **Overall Assessment:** [CRITICAL / NEEDS WORK / ACCEPTABLE / GOOD]
 
 ## Detailed Findings
-
-### RED Tests (Must Remove/Replace)
-
-#### Tautological Tests
-| Test | File:Line | Problem | Action |
-|------|-----------|---------|--------|
-
-#### Mock-Testing Tests
-| Test | File:Line | Problem | Action |
-|------|-----------|---------|--------|
-
-#### Line Hitters
-| Test | File:Line | Problem | Action |
-|------|-----------|---------|--------|
-
-#### Evergreen Tests
-| Test | File:Line | Problem | Action |
-|------|-----------|---------|--------|
-
-### YELLOW Tests (Must Strengthen)
-
-#### Weak Assertions
-| Test | File:Line | Current | Recommended |
-|------|-----------|---------|-------------|
-
-#### Happy Path Only
-| Test | File:Line | Missing Edge Cases |
-|------|-----------|-------------------|
-
-### GREEN Tests (Exemplars)
-
-[List 3-5 tests that exemplify good testing practices for this codebase]
-
-## Missing Corner Cases by Module
-
-### [Module: name] - Priority: P0
-| Corner Case | Bug Risk | Recommended Test |
-|-------------|----------|------------------|
-
-[Repeat for each module]
+For each RED/YELLOW test: Test name, File:Line, Problem, Action.
+For each missing corner case: Corner Case, Bug Risk, Recommended Test.
 
 ## br Issues Created
-
-### Epic
-- **br-N**: Test Quality Improvement: [Project Name]
-
-### Tasks
-| br ID | Task | Priority | Status |
-|-------|------|----------|--------|
-| br-N | Remove tautological tests from [module] | P0 | Created |
-| br-N | Strengthen weak assertions in [module] | P1 | Created |
-| br-N | Add missing corner case tests for [module] | P1 | Created |
-| br-N | Validate with mutation testing | P1 | Created |
-
-### Dependency Tree
-```
-br-1 (Epic: Test Quality Improvement)
-├── br-2 (Remove tautological tests)
-├── br-3 (Strengthen weak assertions) ← depends on br-2
-├── br-4 (Add corner case tests) ← depends on br-3
-└── br-5 (Validate with mutation testing) ← depends on br-4
-```
-
-## SRE Task Refinement Status
-
-- [ ] All tasks reviewed with hyperpowers:sre-task-refinement
-- [ ] Category 8 (Test Meaningfulness) applied to each task
-- [ ] Success criteria are measurable
-- [ ] Anti-patterns specified
-
-## Next Steps
-
-1. Run `br ready` to see tasks ready for implementation
-2. Implement tasks using hyperpowers:executing-plans
-3. Run validation task to verify improvements
+- br-N (epic): Test Quality Improvement
+- br-N (P0): Remove tautological tests
+- br-N (P1): Strengthen weak assertions
+- br-N (P1): Add corner case tests
+- br-N (P1): Validate with mutation testing
 ```
 </the_process>
 
@@ -1046,11 +767,6 @@ Before completing analysis:
 </verification_checklist>
 
 <integration>
-**This skill is called by:**
-- hyperpowers:review-implementation (when test quality issues flagged)
-- User request to audit test quality
-- Before major refactoring efforts
-
 **This skill calls (MANDATORY):**
 - hyperpowers:sre-task-refinement (for ALL br tasks created)
 - hyperpowers:test-runner agent (to run tests during analysis)

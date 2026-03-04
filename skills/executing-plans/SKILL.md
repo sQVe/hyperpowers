@@ -599,11 +599,6 @@ Before closing epic:
 - review-implementation (final validation before closing epic)
 - finishing-a-development-branch (after review approves)
 
-**This skill is called by:**
-- User (via /hyperpowers:execute-plan command)
-- After writing-plans creates epic
-- Explicitly to resume after checkpoint (user runs command again)
-
 **Agents used:**
 - hyperpowers:test-runner (run tests, return summary only)
 

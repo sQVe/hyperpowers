@@ -534,11 +534,6 @@ Before claiming bug fixed:
 - test-driven-development (RED-GREEN-REFACTOR cycle)
 - verification-before-completion (verify complete fix)
 
-**This skill is called by:**
-- When bugs discovered during development
-- When test failures need fixing
-- When user reports bugs
-
 **Agents used:**
 - hyperpowers:internet-researcher (via debugging-with-tools)
 - hyperpowers:codebase-investigator (via debugging-with-tools)
