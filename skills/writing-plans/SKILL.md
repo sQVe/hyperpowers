@@ -107,7 +107,16 @@ Verify these assumptions and report:
 
 **Bite-sized granularity (2-5 minutes per step):**
 
-For new features, load and follow `hyperpowers:test-driven-development` (Use Skill tool). Steps must follow RED-GREEN-REFACTOR:
+**MANDATORY — Classify BEFORE writing any steps:**
+
+- **TDD-EXEMPT:** No behavior to assert. Examples: schema migrations, translation strings, config files, pure type/shape definitions with no logic.
+- **TDD-REQUIRED:** Has behavior that can be asserted. If you could write a test for it, you must.
+
+State the classification explicitly: `TDD classification: EXEMPT — no behavior to assert` or `TDD classification: REQUIRED — has testable behavior`.
+
+**FORBIDDEN:** Writing implementation steps for a TDD-REQUIRED task without RED-GREEN-REFACTOR structure. One task being EXEMPT does not make the next task EXEMPT.
+
+For TDD-REQUIRED tasks, load and follow `hyperpowers:test-driven-development` (Use Skill tool). Steps must follow RED-GREEN-REFACTOR:
 1. Write the failing test (one step)
 2. Run it to verify it fails — RED (one step)
 3. Implement minimal code to pass (one step)
@@ -419,6 +428,12 @@ br show br-4  # Read next task
    - ❌ "Update `index.js` if exists"
    - ✅ "Create `src/auth.ts`" (investigator confirmed)
 
+6. **Classify TDD before writing steps** → Every task gets a classification
+   - ❌ FORBIDDEN: Skipping classification and writing bare implementation steps
+   - ❌ FORBIDDEN: Letting one EXEMPT task silently exempt later tasks
+   - ✅ REQUIRED: State `TDD classification: REQUIRED` or `TDD classification: EXEMPT` at the top of each task's steps
+   - ✅ REQUIRED: TDD-REQUIRED tasks follow RED-GREEN-REFACTOR; nothing else is acceptable
+
 ## Common Excuses
 
 All of these mean: Stop, write actual content:
@@ -426,6 +441,8 @@ All of these mean: Stop, write actual content:
 - "The implementation is obvious from the goal"
 - "See above for the steps"
 - "User can figure out the code"
+- "This task is mostly infrastructure / schema / config, no TDD needed" (classify explicitly — don't rationalize blanket exemption)
+- "The first task was EXEMPT so this one probably is too" (each task gets its own classification)
 
 </critical_rules>
 
@@ -433,6 +450,8 @@ All of these mean: Stop, write actual content:
 
 Before marking each task complete in TodoWrite:
 - [ ] Used codebase-investigator agent (not manual verification)
+- [ ] Stated TDD classification (REQUIRED or EXEMPT) at top of implementation steps
+- [ ] TDD-REQUIRED tasks have RED-GREEN-REFACTOR structure (not bare implementation)
 - [ ] Presented COMPLETE expansion to user (showed full text)
 - [ ] User approved expansion (via AskUserQuestion)
 - [ ] Updated br with actual content (no placeholders)
