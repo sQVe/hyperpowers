@@ -107,7 +107,7 @@ Tasks contain 4-8 implementation steps. Create TodoWrite todos for each to preve
 ```
 
 **Execute steps:**
-- Use `test-driven-development` when implementing features
+- **REQUIRED for features/fixes:** Use Skill tool: `hyperpowers:test-driven-development`
 - Mark each substep completed immediately after finishing
 - Use `test-runner` agent for verifications
 

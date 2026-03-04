@@ -107,12 +107,13 @@ Verify these assumptions and report:
 
 **Bite-sized granularity (2-5 minutes per step):**
 
-For new features (follow test-driven-development):
+For new features, load and follow `hyperpowers:test-driven-development` (Use Skill tool). Steps must follow RED-GREEN-REFACTOR:
 1. Write the failing test (one step)
-2. Run it to verify it fails (one step)
+2. Run it to verify it fails — RED (one step)
 3. Implement minimal code to pass (one step)
-4. Run tests to verify they pass (one step)
-5. Commit (one step)
+4. Run tests to verify they pass — GREEN (one step)
+5. Refactor if needed, keep tests green (one step)
+6. Commit (one step)
 
 **Include in each step:**
 - Exact file path
@@ -451,6 +452,7 @@ Before finishing all tasks:
 **This skill calls:**
 - sre-task-refinement (optional, can run before this)
 - codebase-investigator (REQUIRED for each task verification)
+- test-driven-development (REQUIRED when expanding feature/fix tasks)
 - executing-plans (offered after all tasks expanded)
 
 **This skill is called by:**
